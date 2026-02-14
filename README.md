@@ -14,3 +14,4 @@ Au lieu d'une simple liste de tâches (To-Do list) classique, l'application prop
  - Ajouter un mode "Urgence" qui ignore l'énergie.
  - Intégrer une petite musique d'ambiance Lo-Fi qui change selon l'état d'esprit choisi.
  - Faire en sorte que l'application "félicite" l'utilisateur avec une phrase aléatoire un peu drôle.
+ - Intégrer des méthodes de travail comme Pomodoro
