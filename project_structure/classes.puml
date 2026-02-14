@@ -14,8 +14,8 @@ json tasks_list {
 
 class Core {
     current_mode
-    add_input()
-    rm_input()
+    active_input : str
+    modify_input()
     update()
     display()
 }

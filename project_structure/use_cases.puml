@@ -1,6 +1,6 @@
 @startuml
 left to right direction
-title __cas d'utilisation__
+title __cas d'utilisation (MVP)__
 
 :User: as U
 
@@ -12,7 +12,6 @@ package Liste_de_tâches {
 
 package Liste_intelligente {
     (sélectionner humeur) as select
-    (voir le temps passé\nsur la tâche en cours) as time
     (filtrer les tâches) as filter
 }
 
@@ -20,8 +19,6 @@ U --> new
 U --> remove
 U --> complete
 U --> select
-U --> time
 U --> filter
-U --> deck
 
 @enduml
