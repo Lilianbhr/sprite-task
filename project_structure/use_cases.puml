@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+title __cas d'utilisation__
+
+:User: as U
+
+package Liste_de_tâches {
+    (créer une tache) as new
+    (supprimer une tache) as remove
+    (compléter une tache) as complete
+}
+
+package Liste_intelligente {
+    (sélectionner humeur) as select
+    (voir le temps passé\nsur la tâche en cours) as time
+    (filtrer les tâches) as filter
+    (avoir un groupe de tâches en cours) as deck
+}
+
+U --> new
+U --> remove
+U --> complete
+U --> select
+U --> time
+U --> filter
+U --> deck
+
+@enduml
