@@ -1,0 +1,37 @@
+@startuml
+'left to right direction
+title __états & transitions__
+
+
+' states --------------------
+state choose
+
+state list {
+    state humeur <<entryPoint>>
+    state none <<entryPoint>>
+    state matching_tasks
+    state tout_voir
+    state task
+}
+
+
+' relations -----------------
+
+[*] --> choose : ouverture
+
+choose --> humeur : humeur\nsélectionnée
+choose --> none : pas d'humeur\nsélectionné
+
+humeur --> matching_tasks
+none --> tout_voir
+
+matching_tasks -right-> tout_voir
+matching_tasks --> task
+
+tout_voir -left-> matching_tasks
+tout_voir --> task
+
+task --> matching_tasks
+task --> tout_voir
+
+@enduml
