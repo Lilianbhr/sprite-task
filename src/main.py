@@ -8,7 +8,7 @@ pygame.display.set_caption("SpriteTask")
 background_color = (255, 255, 255)
 
 # Core loop
-mode = Core()
+mode = Core(screen)
 clock = pygame.time.Clock()
 running = True
 while running:
@@ -22,6 +22,8 @@ while running:
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
             mode.modify_input(key)
+        elif pygame.mouse.get_pressed() == (1, 0, 0):
+            mode.modify_input("mouse_click")
 
     pygame.display.flip()
     clock.tick(60)
