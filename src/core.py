@@ -1,11 +1,18 @@
+import pygame
+
 from choose_interface import Choose
 from list_interface import TaskList
 
 
 class Core:
-    def __init__(self, screen):
+    def __init__(self, screen: pygame.Surface):
         self.screen = screen
-        self.current_mode = Choose()
+        self.surface_size = (2 * self.screen.get_width() // 3,
+                             2 * self.screen.get_height() // 3)
+        self.choose_surface = pygame.Surface(self.surface_size)
+        self.choose_pos = (self.screen.get_width()//2-self.surface_size[0]//2,
+                           self.screen.get_height()//2-self.surface_size[1]//2)
+        self.current_mode = Choose(self.choose_surface, self.choose_pos)
         self.active_input = ""
 
     def modify_input(self, new: str) -> None:
