@@ -2,14 +2,11 @@ import pygame
 import general
 
 
-class Choose:
-    def __init__(self, surface: pygame.Surface, pos):
-        self.surface = surface
-        self.pos = pos
+class Choose(general.Div):
+    def __init__(self, size: tuple, pos: tuple):
+        super().__init__(size, pos)
         self.elements = []
         self.set_elements()
-        self.interface_rect = self.surface.get_rect()
-        self.interface_rect.topleft = pos
 
     def set_elements(self):
         surface_size = self.surface.get_size()
@@ -30,11 +27,8 @@ class Choose:
         if active_input == "mouse_click":
             mouse_pos = pygame.mouse.get_pos()
             for elt in self.elements:
-                if self.interface_rect.collidepoint(mouse_pos):
-                    m_pos = (
-                        mouse_pos[0] - self.pos[0],
-                        mouse_pos[1] - self.pos[1]
-                    )
+                if self.hit_box.collidepoint(mouse_pos):
+                    m_pos = self.get_relative_pos(mouse_pos)
                     if elt.collided(m_pos):
                         return elt.get_name()
         return ""
@@ -42,31 +36,28 @@ class Choose:
     def display(self, screen: pygame.Surface):
         for elt in self.elements:
             elt.display(self.surface)
-        screen.blit(self.surface, self.interface_rect)
+        screen.blit(self.surface, self.hit_box)
 
 
-class Humeur:
+class Humeur(general.Div):
     def __init__(self, nom: str, description: str, size: tuple, pos: tuple):
+        super().__init__(size, pos)
         self.nom = nom
         self.description = description
 
-        self.screen_text_nom = general.get_screen_text_for(self.nom, size[1] // 5)
-        self.screen_nom_rect = self.screen_text_nom.get_rect()
-        self.screen_nom_rect.centery = size[1] // 2
-        self.screen_nom_rect.centerx = size[0] // 10
+        self.text_nom = general.get_screen_text_for(self.nom, size[1] // 5)
+        self.nom_rect = self.text_nom.get_rect()
+        self.nom_rect.centery = size[1] // 2
+        self.nom_rect.left = size[0] // 20
 
-        self.screen_description = general.get_screen_text_for(
+        self.text_description = general.get_screen_text_for(
             self.description,
             size[1] // 7
         )
-        self.description_rect = self.screen_description.get_rect()
+        self.description_rect = self.text_description.get_rect()
         self.description_rect.centery = size[1] // 2
-        self.description_rect.left = self.screen_nom_rect.right + 25
+        self.description_rect.left = self.nom_rect.right + 25
 
-        self.surface = pygame.Surface(size)
-        self.hit_box = self.surface.get_rect()
-        self.hit_box.topleft = pos
-        print(self.hit_box)
         self.surface.fill((255, 0, 0))
 
     def get_name(self):
@@ -78,8 +69,8 @@ class Humeur:
         return False
 
     def display(self, surface: pygame.Surface):
-        self.surface.blit(self.screen_text_nom, self.screen_nom_rect)
-        self.surface.blit(self.screen_description, self.description_rect)
+        self.surface.blit(self.text_nom, self.nom_rect)
+        self.surface.blit(self.text_description, self.description_rect)
         surface.blit(self.surface, self.hit_box)
 
     def __str__(self):

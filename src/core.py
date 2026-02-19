@@ -9,10 +9,9 @@ class Core:
         self.screen = screen
         self.surface_size = (2 * self.screen.get_width() // 3,
                              2 * self.screen.get_height() // 3)
-        self.choose_surface = pygame.Surface(self.surface_size)
-        self.choose_pos = (self.screen.get_width()//2-self.surface_size[0]//2,
-                           self.screen.get_height()//2-self.surface_size[1]//2)
-        self.current_mode = Choose(self.choose_surface, self.choose_pos)
+        self.surface_pos = (self.screen.get_width()//2-self.surface_size[0]//2,
+                            self.screen.get_height()//2-self.surface_size[1]//2)
+        self.current_mode = Choose(self.surface_size, self.surface_pos)
         self.active_input = ""
 
     def modify_input(self, new: str) -> None:
