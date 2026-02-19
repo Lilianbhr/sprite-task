@@ -22,6 +22,9 @@ class Choose(general.Div):
         self.elements.append(
             Humeur("mood_3", "mood_3", (tile_w, tile_h), (0, tile_h * 2))
         )
+        self.elements.append(
+            Humeur("ignorer", "ignorer", (tile_w, tile_h), (0, tile_h * 3))
+        )
 
     def update(self, active_input: str) -> str:
         if active_input == "mouse_click":
@@ -29,7 +32,7 @@ class Choose(general.Div):
             for elt in self.elements:
                 if self.hit_box.collidepoint(mouse_pos):
                     m_pos = self.get_relative_pos(mouse_pos)
-                    if elt.collided(m_pos):
+                    if elt.is_under(m_pos):
                         return elt.get_name()
         return ""
 
@@ -63,16 +66,7 @@ class Humeur(general.Div):
     def get_name(self):
         return self.nom
 
-    def collided(self, point: tuple) -> bool:
-        if self.hit_box.collidepoint(point):
-            return True
-        return False
-
     def display(self, surface: pygame.Surface):
         self.surface.blit(self.text_nom, self.nom_rect)
         self.surface.blit(self.text_description, self.description_rect)
         surface.blit(self.surface, self.hit_box)
-
-    def __str__(self):
-        res = f"name : {self.nom}"
-        return res
