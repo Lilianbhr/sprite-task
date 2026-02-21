@@ -30,8 +30,8 @@ class Core:
         ret = self.current_mode.update(self.active_input)
         if ret:
             size = (
-                4 * self.screen.get_width() // 5,
-                4 * self.screen.get_height() // 5
+                9 * self.screen.get_width() // 10,
+                9 * self.screen.get_height() // 10
             )
             pos = (
                 self.screen.get_width() // 2 - size[0] // 2,
