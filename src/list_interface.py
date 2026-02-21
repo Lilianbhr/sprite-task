@@ -6,13 +6,38 @@ class TaskList(general.Div):
     def __init__(self, size: tuple, pos: tuple):
         super().__init__(size, pos)
         self.matching_tasks = []
-        self.grid = Grid(self.surface.get_size(), (0, 0))
+        self.control_bar = ControlBar(
+            (self.surface.get_width(), self.surface.get_height() // 10),
+            (0, 0)
+        )
+        self.grid = Grid(
+            (self.surface.get_width(), 9 * self.surface.get_height() // 10),
+            (0, self.control_bar.hit_box.bottom)
+        )
 
     def update(self, active_input: str):
         pass
 
     def display(self, screen: pygame.Surface):
+        self.control_bar.display(self.surface)
         self.grid.display(self.surface)
+        screen.blit(self.surface, self.hit_box)
+
+
+class ControlBar(general.Div):
+    def __init__(self, size: tuple, pos: tuple):
+        super().__init__(size, pos)
+        self.surface.fill((0, 0, 255))
+
+        self.text = general.get_screen_text_for("Control Bar", size[1] // 5)
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (
+            self.surface.get_width() // 2,
+            self.surface.get_height() // 2
+        )
+
+    def display(self, screen: pygame.Surface):
+        self.surface.blit(self.text, self.text_rect)
         screen.blit(self.surface, self.hit_box)
 
 
