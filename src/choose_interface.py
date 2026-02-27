@@ -30,7 +30,7 @@ class Choose(general.Div):
         if active_input == "mouse_click":
             mouse_pos = pygame.mouse.get_pos()
             for elt in self.elements:
-                if self.hit_box.collidepoint(mouse_pos):
+                if self.is_under(mouse_pos):
                     m_pos = self.get_relative_pos(mouse_pos)
                     if elt.is_under(m_pos):
                         return elt.get_name()

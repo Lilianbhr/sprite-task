@@ -16,6 +16,22 @@ class Div:
         return point[0] - self.hit_box.left, point[1] - self.hit_box.top
 
 
+class Button(Div):
+    def __init__(self, size: tuple, pos: tuple, name: str):
+        super().__init__(size, pos)
+        self.name = get_screen_text_for(name, size[1] // 3)
+        self.name_rect = self.name.get_rect()
+        self.name_rect.center = (
+            self.surface.get_width() // 2,
+            self.surface.get_height() // 2,
+        )
+        self.surface.fill((0, 0, 50))
+
+    def display(self, screen: pygame.surface):
+        self.surface.blit(self.name, self.name_rect)
+        screen.blit(self.surface, self.hit_box)
+
+
 def get_screen_text_for(text: str, size: int):
     font = pygame.font.SysFont("Arial", size)
     screen_text = font.render(text, True, (255, 255, 255))

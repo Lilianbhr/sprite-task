@@ -2,6 +2,14 @@ import pygame
 import pygame_textinput
 import general
 
+type_t = {
+    "nom": "",
+    "description": "",
+    "fini": False,
+    "difficulte": 0,
+    "longueur": 0
+}
+
 
 class TaskList(general.Div):
     def __init__(self, size: tuple, pos: tuple):
@@ -47,6 +55,16 @@ class TaskList(general.Div):
                 )
                 self.editor = None
                 self.grid.fill_elements(self.matching_tasks)
+        if active_input == "mouse_click":
+            mouse_pos = pygame.mouse.get_pos()
+            if self.is_under(mouse_pos):
+                rel_pos = self.get_relative_pos(mouse_pos)
+                if self.control_bar.is_under(rel_pos):
+                    pos = self.control_bar.get_relative_pos(rel_pos)
+                    ret = self.control_bar.update(pos)
+                    if ret:
+                        self.matching_tasks.append(type_t)
+                        self.grid.fill_elements(self.matching_tasks)
 
     def display(self, screen: pygame.Surface):
         self.surface.fill((0, 0, 0))
@@ -69,8 +87,19 @@ class ControlBar(general.Div):
             self.surface.get_height() // 2
         )
 
+        size_b = (size[0] // 10, 2 * size[1] // 3)
+        self.ajouter = general.Button(size_b, (0, 0), "ajouter")
+        self.ajouter.hit_box.right = 19 * size[0] // 20
+        self.ajouter.hit_box.centery = size[1] // 2
+
+    def update(self, pos: tuple) -> str:
+        if self.ajouter.is_under(pos):
+            return "ajouter"
+        return ""
+
     def display(self, screen: pygame.Surface):
         self.surface.blit(self.text, self.text_rect)
+        self.ajouter.display(self.surface)
         screen.blit(self.surface, self.hit_box)
 
 
