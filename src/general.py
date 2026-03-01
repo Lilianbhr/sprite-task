@@ -49,6 +49,38 @@ class Button(Div):
 # ============================================================================
 
 
+class CheckBox(Div):
+    """
+    Div qui n'existe qu'en deux états disctincts.
+    """
+    def __init__(self, size: tuple, pos: tuple, state=False):
+        super().__init__(size, pos)
+        self.state = state
+        self.color_state()
+
+    def switch_state(self):  # --------------------------------------
+        if self.state:
+            self.state = False
+        else:
+            self.state = True
+        self.color_state()
+
+    def color_state(self):  # ---------------------------------------
+        """ L'état est représenté visuellement par une couleur. """
+        if self.state:
+            self.surface.fill((255, 255, 0))
+        else:
+            self.surface.fill((255, 0, 255))
+
+    def get_state(self):  # -----------------------------------------
+        return self.state
+
+    def display(self, screen: pygame.Surface):  # -------------------
+        screen.blit(self.surface, self.hit_box)
+
+# ============================================================================
+
+
 def get_screen_text_for(text: str, size: int):
     """ Renvoie un texte sous un format exploitable
     pour l'affichage de pygame """

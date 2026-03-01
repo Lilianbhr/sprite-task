@@ -7,15 +7,6 @@ import pygame
 import pygame_textinput
 import general
 
-# Structure exemple des spécifications d'une tâche
-type_t = {
-    "nom": "aller faire les courses chez carrefour",
-    "description": "",
-    "fini": False,
-    "difficulte": 0,
-    "longueur": 0
-}
-
 
 class TaskList(general.Div):
     """
@@ -97,8 +88,16 @@ class TaskList(general.Div):
                     # Barre de contrôle
                     ret = self.control_bar.update(bc_pos)
                     if ret:
-                        self.matching_tasks.append(type_t)
+                        self.matching_tasks.append({"fini": False})
                         self.grid.fill_elements(self.matching_tasks)
+
+                # Pos souris sur la grille
+                if self.grid.is_under(m_pos):
+                    g_pos = self.grid.get_relative_pos(m_pos)
+
+                    # Grille
+                    for task in self.grid.elements:
+                        task.update(g_pos)
 
     def display(self, screen: pygame.Surface):  # -------------------
         self.surface.fill((0, 0, 0))
@@ -190,9 +189,17 @@ class Task(general.Div):
     def __init__(self, size: tuple, pos: tuple, spec: dict):
         super().__init__(size, pos)
         self.spec = spec
+        self.ended = general.CheckBox((30, 30), (50, 50), spec["fini"])
         self.surface.fill((0, 0, 50))
 
-    def display(self, screen: pygame.Surface):
+    def update(self, pos: tuple):  # --------------------------------
+        t_pos = self.get_relative_pos(pos)
+        if self.ended.is_under(t_pos):
+            self.ended.switch_state()
+            self.spec["fini"] = self.ended.get_state()
+
+    def display(self, screen: pygame.Surface):  # -------------------
+        self.ended.display(self.surface)
         screen.blit(self.surface, self.hit_box)
 
 # ============================================================================
