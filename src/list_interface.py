@@ -1,7 +1,13 @@
+"""
+Ce fichier contient l'ensemble des ressources liées uniquement
+à l'affichage du menu principal de l'application.
+"""
+
 import pygame
 import pygame_textinput
 import general
 
+# Structure exemple des spécifications d'une tâche
 type_t = {
     "nom": "aller faire les courses chez carrefour",
     "description": "",
@@ -12,61 +18,89 @@ type_t = {
 
 
 class TaskList(general.Div):
+    """
+    La boite qui gère les interactions
+    de l'utilisateur avec les éléments du menu.
+    """
     def __init__(self, size: tuple, pos: tuple):
         super().__init__(size, pos)
         self.matching_tasks = []
+
+        # Bar de contrôles
         self.control_bar = ControlBar(
             (self.surface.get_width(), self.surface.get_height() // 10),
             (0, 0)
         )
+
+        # Grille + Éditeur de tâches
+        self.grid = None
+        self.editor = None
+        self.setup_grid_only()
+
+    def setup_grid_only(self):  # -----------------------------------
+
+        # Grille
         self.grid = Grid(
             (self.surface.get_width(), 9 * self.surface.get_height() // 10),
             (0, self.control_bar.hit_box.bottom),
             (4, 4)
         )
-        self.editor = None
         self.grid.fill_elements(self.matching_tasks)
 
-    def update(self, active_input: str):
+        # Éditeur de tâches
+        self.editor = None
+
+    def setup_grid_editor(self):  # ---------------------------------
+
+        # Grille
+        self.grid = Grid(
+            (
+                3 * self.surface.get_width() // 5,
+                9 * self.surface.get_height() // 10
+            ),
+            (0, self.control_bar.hit_box.bottom),
+            (3, 4)
+        )
+        self.grid.fill_elements(self.matching_tasks)
+
+        # Éditeur de tâches
+        self.editor = TaskEditor(
+            (
+                2 * self.surface.get_width() // 5,
+                9 * self.surface.get_height() // 10
+            ),
+            (self.grid.hit_box.right, self.control_bar.hit_box.bottom),
+            {"nom": "task"}
+        )
+
+    def update(self, active_input: str):  # -------------------------
+
+        # Activation/désactivation de l'éditeur de tâches
         if active_input == "space":
             if self.editor is None:
-                self.grid = Grid(
-                    (
-                        3 * self.surface.get_width() // 5,
-                        9 * self.surface.get_height() // 10
-                    ),
-                    (0, self.control_bar.hit_box.bottom),
-                    (3, 4)
-                )
-                self.editor = TaskEditor(
-                    (
-                        2 * self.surface.get_width() // 5,
-                        9 * self.surface.get_height() // 10
-                    ),
-                    (self.grid.hit_box.right, self.control_bar.hit_box.bottom),
-                    {"nom": "task"}
-                )
-                self.grid.fill_elements(self.matching_tasks)
+                self.setup_grid_editor()
             else:
-                self.grid = Grid(
-                    (self.surface.get_width(), 9 * self.surface.get_height() // 10),
-                    (0, self.control_bar.hit_box.bottom),
-                    (4, 4)
-                )
-                self.editor = None
-                self.grid.fill_elements(self.matching_tasks)
+                self.setup_grid_only()
+
+        # Pos réel souris
         if active_input == "mouse_click":
             mouse_pos = pygame.mouse.get_pos()
+
+            # Pos souris sur le menu
             if self.is_under(mouse_pos):
-                rel_pos = self.get_relative_pos(mouse_pos)
-                if self.control_bar.is_under(rel_pos):
-                    pos = self.control_bar.get_relative_pos(rel_pos)
-                    ret = self.control_bar.update(pos)
+                m_pos = self.get_relative_pos(mouse_pos)
+
+                # Pos souris sur la barre de contrôles
+                if self.control_bar.is_under(m_pos):
+                    bc_pos = self.control_bar.get_relative_pos(m_pos)
+
+                    # Barre de contrôle
+                    ret = self.control_bar.update(bc_pos)
                     if ret:
                         self.matching_tasks.append(type_t)
                         self.grid.fill_elements(self.matching_tasks)
 
-    def display(self, screen: pygame.Surface):
+    def display(self, screen: pygame.Surface):  # -------------------
         self.surface.fill((0, 0, 0))
         self.control_bar.display(self.surface)
         self.grid.display(self.surface)
@@ -74,12 +108,19 @@ class TaskList(general.Div):
             self.editor.display(self.surface)
         screen.blit(self.surface, self.hit_box)
 
+# ============================================================================
+
 
 class ControlBar(general.Div):
+    """
+    Barre de contrôles, elle permet de réaliser
+    différentes action à l'aide de boutons
+    """
     def __init__(self, size: tuple, pos: tuple):
         super().__init__(size, pos)
         self.surface.fill((0, 0, 255))
 
+        # Texte - Exploitable par pygame
         self.text = general.get_screen_text_for("Control Bar", size[1] // 5)
         self.text_rect = self.text.get_rect()
         self.text_rect.center = (
@@ -87,44 +128,62 @@ class ControlBar(general.Div):
             self.surface.get_height() // 2
         )
 
+        # Bouton - 'Ajouter'
         size_b = (size[0] // 10, 2 * size[1] // 3)
         self.ajouter = general.Button(size_b, (0, 0), "ajouter")
         self.ajouter.hit_box.right = 19 * size[0] // 20
         self.ajouter.hit_box.centery = size[1] // 2
 
-    def update(self, pos: tuple) -> str:
+    def update(self, pos: tuple) -> str:  # -------------------------
         if self.ajouter.is_under(pos):
             return "ajouter"
         return ""
 
-    def display(self, screen: pygame.Surface):
+    def display(self, screen: pygame.Surface):  # -------------------
         self.surface.blit(self.text, self.text_rect)
         self.ajouter.display(self.surface)
         screen.blit(self.surface, self.hit_box)
 
+# ============================================================================
+
 
 class Grid(general.Div):
+    """
+    Grille d'affichage des tâches, elle permet d'afficher et de manager
+    les tâches auquelles elle est associée en leur donnant une taille identique
+    et une position dynamique.
+    """
     def __init__(self, size: tuple, pos: tuple, layout_size: tuple):
         super().__init__(size, pos)
-        self.nb_colonne = layout_size[0]
-        self.nb_ligne = layout_size[1]
-        self.tile_size = (size[0] // self.nb_colonne, size[1] // self.nb_ligne)
         self.elements = []
         self.surface.fill((0, 255, 0))
 
-    def fill_elements(self, new_list: list):
+        # Dimensions de la grille
+        self.nb_colonne = layout_size[0]
+        self.nb_ligne = layout_size[1]
+        self.tile_size = (
+            size[0] // self.nb_colonne,
+            size[1] // self.nb_ligne
+        )
+
+    def fill_elements(self, new_list: list):  # ---------------------
         self.elements = []
         i = 0
         for elt in new_list:
-            pos = ((i % self.nb_colonne) * self.tile_size[0], (i // self.nb_colonne) * self.tile_size[1])
+            pos = (
+                (i % self.nb_colonne) * self.tile_size[0],
+                (i // self.nb_colonne) * self.tile_size[1]
+            )
             task = Task(self.tile_size, pos, elt)
             self.elements.append(task)
             i += 1
 
-    def display(self, screen: pygame.Surface):
+    def display(self, screen: pygame.Surface):  # -------------------
         for elt in self.elements:
             elt.display(self.surface)
         screen.blit(self.surface, self.hit_box)
+
+# ============================================================================
 
 
 class Task(general.Div):
@@ -135,6 +194,8 @@ class Task(general.Div):
 
     def display(self, screen: pygame.Surface):
         screen.blit(self.surface, self.hit_box)
+
+# ============================================================================
 
 
 class TaskEditor(general.Div):

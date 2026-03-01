@@ -22,7 +22,7 @@ while running:
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
             mode.modify_input(key)
-        elif pygame.mouse.get_pressed() == (1, 0, 0):
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             mode.modify_input("mouse_click")
 
     pygame.display.flip()
