@@ -166,6 +166,7 @@ class Grid(general.Div):
         )
 
     def fill_elements(self, new_list: list):  # ---------------------
+        """ Construction dynamique des tâches """
         self.elements = []
         i = 0
         for elt in new_list:
