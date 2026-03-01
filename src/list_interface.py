@@ -3,7 +3,7 @@ import pygame_textinput
 import general
 
 type_t = {
-    "nom": "",
+    "nom": "aller faire les courses chez carrefour",
     "description": "",
     "fini": False,
     "difficulte": 0,
@@ -130,14 +130,10 @@ class Grid(general.Div):
 class Task(general.Div):
     def __init__(self, size: tuple, pos: tuple, spec: dict):
         super().__init__(size, pos)
-        self.nom = spec["nom"]
-        self.description = spec["description"]
-        self.fini = spec["fini"]
-        self.difficulte = spec["difficulte"]
-        self.longueur = spec["longueur"]
+        self.spec = spec
+        self.surface.fill((0, 0, 50))
 
     def display(self, screen: pygame.Surface):
-        self.surface.fill((0, 0, 50))
         screen.blit(self.surface, self.hit_box)
 
 
