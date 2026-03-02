@@ -82,6 +82,10 @@ class CheckBox(Div):
 
 
 class Text(Div):
+    """
+    Manage le texte affiché sur une surface pour
+    lui permettre de s'adapter à la taille du conteneur.
+    """
     def __init__(self, size: tuple, pos: tuple, text: str, font_size: int):
         super().__init__(size, pos)
         self.raw_text = text.split()
@@ -95,27 +99,41 @@ class Text(Div):
         self.screen_text = []
         self.wrap()
 
-    def wrap(self):
+    def wrap(self):  # ----------------------------------------------
+        """
+        Gère l'attribution des positions de chaque mots du texte fournit.
+        """
+        # initialisation
         x = 0
         y = 0
+
+        # Récuperation de la taille de chaque mot
         for word in self.raw_text:
             screen_word = get_screen_text_for(word, self.font_size)
             word_rect = screen_word.get_rect()
+
+            # Si c'est le premier mot sur la ligne
             if x == 0:
                 self.screen_text.append((screen_word, (0, y)))
                 x += word_rect.width
+
+            # Si le mot rentre entièrement sur la ligne
             elif x + word_rect.width <= self.hit_box.right:
                 self.screen_text.append((screen_word, (x, y)))
                 x += word_rect.width
+
+            # Le mot dépasse de la ligne
             else:
                 x = 0
                 y += word_rect.height
                 self.screen_text.append((screen_word, (x, y)))
                 x += word_rect.width
+
+            # Espace entre chaque mot
             self.screen_text.append((self.space, (x, y)))
             x += self.space_rect.width
 
-    def display(self, screen: pygame.Surface):
+    def display(self, screen: pygame.Surface):  # -------------------
         for elt in self.screen_text:
             self.surface.blit(elt[0], elt[1])
         screen.blit(self.surface, self.hit_box)
