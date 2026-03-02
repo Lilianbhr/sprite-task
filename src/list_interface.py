@@ -220,7 +220,9 @@ class Task(general.Div):
             spec["nom"],
             size[1] // 7
         )
-        self.effort = general.get_screen_text_for(str((spec["difficulte"] + spec["longueur"])/2), size[1] // 5)
+        self.effort = general.get_screen_text_for(
+            str((spec["difficulte"] + spec["longueur"])/2), size[1] // 5
+        )
         self.effort_rect = self.effort.get_rect()
         self.effort_rect.topright = (size[0], 0)
 
