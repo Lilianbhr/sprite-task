@@ -40,7 +40,7 @@ class Button(Div):
             self.surface.get_width() // 2,
             self.surface.get_height() // 2,
         )
-        self.surface.fill((0, 0, 50))
+        self.surface.fill((50, 0, 0))
 
     def display(self, screen: pygame.surface):
         self.surface.blit(self.name, self.name_rect)

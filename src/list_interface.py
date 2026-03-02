@@ -97,7 +97,10 @@ class TaskList(general.Div):
 
                     # Grille
                     for task in self.grid.elements:
-                        task.update(g_pos)
+                        res = task.update(g_pos)
+                        if res:
+                            self.matching_tasks.remove(task.spec)
+                            self.grid.fill_elements(self.matching_tasks)
 
     def display(self, screen: pygame.Surface):  # -------------------
         self.surface.fill((0, 0, 0))
@@ -155,7 +158,6 @@ class Grid(general.Div):
     def __init__(self, size: tuple, pos: tuple, layout_size: tuple):
         super().__init__(size, pos)
         self.elements = []
-        self.surface.fill((0, 255, 0))
 
         # Dimensions de la grille
         self.nb_colonne = layout_size[0]
@@ -179,6 +181,7 @@ class Grid(general.Div):
             i += 1
 
     def display(self, screen: pygame.Surface):  # -------------------
+        self.surface.fill((0, 255, 0))
         for elt in self.elements:
             elt.display(self.surface)
         screen.blit(self.surface, self.hit_box)
@@ -190,17 +193,32 @@ class Task(general.Div):
     def __init__(self, size: tuple, pos: tuple, spec: dict):
         super().__init__(size, pos)
         self.spec = spec
-        self.ended = general.CheckBox((30, 30), (50, 50), spec["fini"])
         self.surface.fill((0, 0, 50))
 
-    def update(self, pos: tuple):  # --------------------------------
+        # Éléments
+        self.ended = general.CheckBox(
+            (size[1] // 5, size[1] // 5),
+            (0, 0),
+            spec["fini"]
+        )
+        self.delete = general.Button(
+            (size[0] // 3, size[1] // 5),
+            (size[1] // 5 + 5, 0),
+            "supprimer"
+        )
+
+    def update(self, pos: tuple) -> str:  # -------------------------
         t_pos = self.get_relative_pos(pos)
         if self.ended.is_under(t_pos):
             self.ended.switch_state()
             self.spec["fini"] = self.ended.get_state()
+        elif self.delete.is_under(t_pos):
+            return "delete"
+        return ""
 
     def display(self, screen: pygame.Surface):  # -------------------
         self.ended.display(self.surface)
+        self.delete.display(self.surface)
         screen.blit(self.surface, self.hit_box)
 
 # ============================================================================
