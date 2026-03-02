@@ -91,7 +91,9 @@ class TaskList(general.Div):
                         self.matching_tasks.append(
                             {
                                 "fini": False,
-                                "nom": "J'arrive, je mets mes chaussures..."
+                                "nom": "J'arrive, je mets mes chaussures...",
+                                "difficulte": 3,
+                                "longueur": 2
                             }
                         )
                         self.grid.fill_elements(self.matching_tasks)
@@ -218,6 +220,9 @@ class Task(general.Div):
             spec["nom"],
             size[1] // 7
         )
+        self.effort = general.get_screen_text_for(str((spec["difficulte"] + spec["longueur"])/2), size[1] // 5)
+        self.effort_rect = self.effort.get_rect()
+        self.effort_rect.topright = (size[0], 0)
 
     def update(self, pos: tuple) -> str:  # -------------------------
         t_pos = self.get_relative_pos(pos)
@@ -232,6 +237,7 @@ class Task(general.Div):
         self.ended.display(self.surface)
         self.delete.display(self.surface)
         self.nom.display(self.surface)
+        self.surface.blit(self.effort, self.effort_rect)
         screen.blit(self.surface, self.hit_box)
 
 # ============================================================================
