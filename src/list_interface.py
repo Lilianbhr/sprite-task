@@ -88,7 +88,12 @@ class TaskList(general.Div):
                     # Barre de contrôle
                     ret = self.control_bar.update(bc_pos)
                     if ret:
-                        self.matching_tasks.append({"fini": False})
+                        self.matching_tasks.append(
+                            {
+                                "fini": False,
+                                "nom": "J'arrive, je mets mes chaussures..."
+                            }
+                        )
                         self.grid.fill_elements(self.matching_tasks)
 
                 # Pos souris sur la grille
@@ -207,6 +212,12 @@ class Task(general.Div):
             (size[1] // 5 + 5, 0),
             "supprimer"
         )
+        self.nom = general.Text(
+            (9 * size[0] // 10, 2 * size[1] // 3),
+            (size[0] // 20, size[1] // 5 + 5),
+            spec["nom"],
+            size[1] // 7
+        )
 
     def update(self, pos: tuple) -> str:  # -------------------------
         t_pos = self.get_relative_pos(pos)
@@ -220,6 +231,7 @@ class Task(general.Div):
     def display(self, screen: pygame.Surface):  # -------------------
         self.ended.display(self.surface)
         self.delete.display(self.surface)
+        self.nom.display(self.surface)
         screen.blit(self.surface, self.hit_box)
 
 # ============================================================================
