@@ -158,13 +158,14 @@ class Grid(general.Div):
     def __init__(self, size: tuple, pos: tuple, layout_size: tuple):
         super().__init__(size, pos)
         self.elements = []
+        self.gap = size[0] // 100
 
         # Dimensions de la grille
         self.nb_colonne = layout_size[0]
         self.nb_ligne = layout_size[1]
         self.tile_size = (
-            size[0] // self.nb_colonne,
-            size[1] // self.nb_ligne
+            (size[0] - self.gap) // self.nb_colonne - self.gap,
+            (size[1] - self.gap) // self.nb_ligne - self.gap
         )
 
     def fill_elements(self, new_list: list):  # ---------------------
@@ -173,8 +174,8 @@ class Grid(general.Div):
         i = 0
         for elt in new_list:
             pos = (
-                (i % self.nb_colonne) * self.tile_size[0],
-                (i // self.nb_colonne) * self.tile_size[1]
+                self.gap + (i % self.nb_colonne) * (self.tile_size[0] + self.gap),
+                self.gap + (i // self.nb_colonne) * (self.tile_size[1] + self.gap)
             )
             task = Task(self.tile_size, pos, elt)
             self.elements.append(task)
