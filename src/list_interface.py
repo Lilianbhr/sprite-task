@@ -88,18 +88,10 @@ class TaskList(general.Div):
                     # Barre de contrôle
                     ret = self.control_bar.update(bc_pos)
                     if ret:
-                        self.matching_tasks.append(
-                            {
-                                "fini": False,
-                                "nom": "J'arrive, je mets mes chaussures...",
-                                "difficulte": 3,
-                                "longueur": 2
-                            }
-                        )
-                        self.grid.fill_elements(self.matching_tasks)
+                        self.setup_grid_editor()
 
                 # Pos souris sur la grille
-                if self.grid.is_under(m_pos):
+                elif self.grid.is_under(m_pos):
                     g_pos = self.grid.get_relative_pos(m_pos)
 
                     # Grille
@@ -108,6 +100,31 @@ class TaskList(general.Div):
                         if res:
                             self.matching_tasks.remove(task.spec)
                             self.grid.fill_elements(self.matching_tasks)
+
+                # Pos souris sur l'éditeur de tâches
+                elif self.editor is not None:
+                    if self.editor.is_under(m_pos):
+
+                        # Éditeur
+                        e_pos = self.editor.get_relative_pos(m_pos)
+                        ree = self.editor.update(e_pos)
+
+                        # Enregistrer
+                        if ree == "enregistrer":
+                            self.matching_tasks.append(
+                                {
+                                    "fini": False,
+                                    "nom": "J'arrive, je mets mes chaussures...",
+                                    "difficulte": 3,
+                                    "longueur": 2
+                                }
+                            )
+                            self.grid.fill_elements(self.matching_tasks)
+                            self.setup_grid_only()
+
+                        # Quitter
+                        elif ree == "quitter":
+                            self.setup_grid_only()
 
     def display(self, screen: pygame.Surface):  # -------------------
         self.surface.fill((0, 0, 0))
@@ -228,11 +245,16 @@ class Task(general.Div):
 
     def update(self, pos: tuple) -> str:  # -------------------------
         t_pos = self.get_relative_pos(pos)
+
+        # Checkbox
         if self.ended.is_under(t_pos):
             self.ended.switch_state()
             self.spec["fini"] = self.ended.get_state()
+
+        # Delete
         elif self.delete.is_under(t_pos):
             return "delete"
+
         return ""
 
     def display(self, screen: pygame.Surface):  # -------------------
@@ -248,11 +270,31 @@ class Task(general.Div):
 class TaskEditor(general.Div):
     def __init__(self, size: tuple, pos: tuple, task: dict):
         super().__init__(size, pos)
-        self.surface.fill((255, 0, 0))
         self.task = task
-        self.selected_area = None
-        self.nom = pygame_textinput.TextInputVisualizer()
-        self.description = pygame_textinput.TextInputVisualizer()
+        self.surface.fill((255, 0, 0))
+
+        # Enregistrer
+        self.save = general.Button(
+            (100, 50),
+            (0, 0),
+            "enregistrer"
+        )
+
+        # Quitter
+        self.quit = general.Button(
+            (100, 50),
+            (100, 0),
+            "quitter"
+        )
+
+    def update(self, pos: tuple) -> str:
+        if self.save.is_under(pos):
+            return "enregistrer"
+        elif self.quit.is_under(pos):
+            return "quitter"
+        return ""
 
     def display(self, screen: pygame.surface):
+        self.save.display(self.surface)
+        self.quit.display(self.surface)
         screen.blit(self.surface, self.hit_box)
