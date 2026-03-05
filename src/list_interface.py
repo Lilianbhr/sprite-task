@@ -107,7 +107,7 @@ class TaskList(general.Div):
                             self.matching_tasks.append(
                                 {
                                     "fini": False,
-                                    "nom": "Les trois petits cochons.",
+                                    "nom": self.editor.nom_visualizer.raw_text,
                                     "difficulte": 3,
                                     "longueur": 2
                                 }

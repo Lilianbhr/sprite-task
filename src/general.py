@@ -92,22 +92,20 @@ class Text(Div):
         self.font_size = font_size
 
         # Text for screen
-        self.screen_text = []
-        self.wrap()
+        self.screen_text = self.wrap(self.raw_text)
 
-    def wrap(self):  # ----------------------------------------------
+    def wrap(self, text: str, origin=(0, 0)) -> list:  # ----------------------------------------------
         """
         Gère l'attribution des positions de chaque mots du texte fournit.
         """
         # initialisation
-        self.screen_text = []
-        x = 0
-        y = 0
+        screen_text = []
+        x, y = origin
         words = []
 
         # Words building
         word = ""
-        for char in self.raw_text:
+        for char in text:
             if char == " ":
                 if word:
                     words.append(word)
@@ -140,7 +138,9 @@ class Text(Div):
                 word_rect.topleft = (x, y)
                 x += word_rect.width
 
-            self.screen_text.append((screen_word, word_rect))
+            screen_text.append((screen_word, word_rect))
+
+        return screen_text
 
     def display(self, screen: pygame.Surface):  # -------------------
         self.surface.fill((0, 0, 0))
@@ -157,11 +157,30 @@ class InputVisualizer(Text):
         self.left = left
         self.right = right
 
+        # Cursor
+        self.cursor = pygame.Surface((3, self.font_size))
+        self.cursor.fill((255, 255, 255))
+        self.cursor_rect = self.cursor.get_rect()
+
     def change_text(self, left="", right=""):
         self.left = left
         self.right = right
         self.raw_text = self.left + self.right
-        self.wrap()
+        self.wrap_input()
+
+    def wrap_input(self):
+        self.cursor_rect.topleft = (0, 0)
+        self.screen_text = self.wrap(
+            self.left,
+            origin=self.cursor_rect.topleft
+        )
+        if self.screen_text:
+            self.cursor_rect.topleft = self.screen_text[-1][1].topright
+        self.screen_text += self.wrap(
+            self.right,
+            origin=self.cursor_rect.topleft
+        )
+        self.screen_text.append((self.cursor, self.cursor_rect))
 
 # ============================================================================
 
