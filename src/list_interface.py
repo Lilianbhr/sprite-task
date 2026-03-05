@@ -66,13 +66,6 @@ class TaskList(general.Div):
 
     def update(self, active_input: str):  # -------------------------
 
-        # Activation/désactivation de l'éditeur de tâches
-        if active_input == "space":
-            if self.editor is None:
-                self.setup_grid_editor()
-            else:
-                self.setup_grid_only()
-
         # Pos réel souris
         if active_input == "mouse_click":
             mouse_pos = pygame.mouse.get_pos()
@@ -287,6 +280,20 @@ class TaskEditor(general.Div):
             "quitter"
         )
 
+        # Nom
+        self.nom_input = pygame_textinput.TextInputManager()
+        self.nom_visualizer = general.InputVisualizer(
+            (size[0], size[1] // 4),
+            (0, 100)
+        )
+
+    def update_text(self, events: pygame.event.Event):
+        self.nom_input.update(events)
+        self.nom_visualizer.change_text(
+            self.nom_input.left,
+            self.nom_input.right
+        )
+
     def update(self, pos: tuple) -> str:
         if self.save.is_under(pos):
             return "enregistrer"
@@ -297,4 +304,5 @@ class TaskEditor(general.Div):
     def display(self, screen: pygame.surface):
         self.save.display(self.surface)
         self.quit.display(self.surface)
+        self.nom_visualizer.display(self.surface)
         screen.blit(self.surface, self.hit_box)

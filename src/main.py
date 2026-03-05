@@ -16,7 +16,10 @@ while running:
     screen.fill(background_color)
     mode.run()
 
-    for event in pygame.event.get():
+    pygame.key.set_repeat(400, 70)
+
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
@@ -24,6 +27,8 @@ while running:
             mode.modify_input(key)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mode.modify_input("mouse_click")
+
+    mode.update_text(events)
 
     pygame.display.flip()
     clock.tick(60)

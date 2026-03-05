@@ -100,11 +100,12 @@ class Text(Div):
         Gère l'attribution des positions de chaque mots du texte fournit.
         """
         # initialisation
+        self.screen_text = []
         x = 0
         y = 0
         words = []
 
-        # Words builing
+        # Words building
         word = ""
         for char in self.raw_text:
             if char == " ":
@@ -142,9 +143,25 @@ class Text(Div):
             self.screen_text.append((screen_word, word_rect))
 
     def display(self, screen: pygame.Surface):  # -------------------
+        self.surface.fill((0, 0, 0))
         for elt in self.screen_text:
             self.surface.blit(elt[0], elt[1])
         screen.blit(self.surface, self.hit_box)
+
+# ============================================================================
+
+
+class InputVisualizer(Text):
+    def __init__(self, size: tuple, pos: tuple, left="", right=""):
+        super().__init__(size, pos, left + right, size[1] // 7)
+        self.left = left
+        self.right = right
+
+    def change_text(self, left="", right=""):
+        self.left = left
+        self.right = right
+        self.raw_text = self.left + self.right
+        self.wrap()
 
 # ============================================================================
 
