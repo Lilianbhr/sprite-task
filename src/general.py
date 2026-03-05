@@ -152,6 +152,7 @@ class Text(Div):
 
 
 class InputVisualizer(Text):
+    """ Permet la visualisation correct d'un champ de texte (input) """
     def __init__(self, size: tuple, pos: tuple, left="", right=""):
         super().__init__(size, pos, left + right, size[1] // 7)
         self.left = left
@@ -162,24 +163,34 @@ class InputVisualizer(Text):
         self.cursor.fill((255, 255, 255))
         self.cursor_rect = self.cursor.get_rect()
 
-    def change_text(self, left="", right=""):
+    def change_text(self, left="", right=""):  # --------------------
         self.left = left
         self.right = right
         self.raw_text = self.left + self.right
         self.wrap_input()
 
-    def wrap_input(self):
+    def wrap_input(self):  # ----------------------------------------
+
+        # Réinitialisation de la pos du curseur
         self.cursor_rect.topleft = (0, 0)
+
+        # wrap partie gauche curseur
         self.screen_text = self.wrap(
             self.left,
             origin=self.cursor_rect.topleft
         )
+
+        # Nouvelles coordonnées curseur
         if self.screen_text:
             self.cursor_rect.topleft = self.screen_text[-1][1].topright
+
+        # wrap partie droite curseur
         self.screen_text += self.wrap(
             self.right,
             origin=self.cursor_rect.topleft
         )
+
+        # ajout du curseur dans les éléments du texte
         self.screen_text.append((self.cursor, self.cursor_rect))
 
 # ============================================================================
