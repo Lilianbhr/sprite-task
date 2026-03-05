@@ -114,7 +114,7 @@ class TaskList(general.Div):
                             self.matching_tasks.append(
                                 {
                                     "fini": False,
-                                    "nom": "J'arrive, je mets mes chaussures...",
+                                    "nom": "Les trois petits cochons.",
                                     "difficulte": 3,
                                     "longueur": 2
                                 }

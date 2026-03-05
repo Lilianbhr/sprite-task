@@ -88,12 +88,8 @@ class Text(Div):
     """
     def __init__(self, size: tuple, pos: tuple, text: str, font_size: int):
         super().__init__(size, pos)
-        self.raw_text = text.split()
+        self.raw_text = text
         self.font_size = font_size
-
-        # Space
-        self.space = get_screen_text_for(" ", self.font_size)
-        self.space_rect = self.space.get_rect()
 
         # Text for screen
         self.screen_text = []
@@ -106,32 +102,44 @@ class Text(Div):
         # initialisation
         x = 0
         y = 0
+        words = []
+
+        # Words builing
+        word = ""
+        for char in self.raw_text:
+            if char == " ":
+                if word:
+                    words.append(word)
+                    word = ""
+                words.append(char)
+            else:
+                word += char
+        if word:
+            words.append(word)
 
         # Récuperation de la taille de chaque mot
-        for word in self.raw_text:
+        for word in words:
             screen_word = get_screen_text_for(word, self.font_size)
             word_rect = screen_word.get_rect()
 
             # Si c'est le premier mot sur la ligne
             if x == 0:
-                self.screen_text.append((screen_word, (0, y)))
+                word_rect.topleft = (x, y)
                 x += word_rect.width
 
             # Si le mot rentre entièrement sur la ligne
             elif x + word_rect.width <= self.hit_box.right:
-                self.screen_text.append((screen_word, (x, y)))
+                word_rect.topleft = (x, y)
                 x += word_rect.width
 
             # Le mot dépasse de la ligne
             else:
                 x = 0
                 y += word_rect.height
-                self.screen_text.append((screen_word, (x, y)))
+                word_rect.topleft = (x, y)
                 x += word_rect.width
 
-            # Espace entre chaque mot
-            self.screen_text.append((self.space, (x, y)))
-            x += self.space_rect.width
+            self.screen_text.append((screen_word, word_rect))
 
     def display(self, screen: pygame.Surface):  # -------------------
         for elt in self.screen_text:
