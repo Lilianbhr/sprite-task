@@ -104,10 +104,13 @@ class TaskList(general.Div):
 
                         # Enregistrer
                         if ree == "enregistrer":
+                            nom = self.editor.nom_visualizer.raw_text
+                            desc = self.editor.description_visualizer.raw_text
                             self.matching_tasks.append(
                                 {
                                     "fini": False,
-                                    "nom": self.editor.nom_visualizer.raw_text,
+                                    "nom": nom,
+                                    "description": desc,
                                     "difficulte": 3,
                                     "longueur": 2
                                 }
@@ -265,6 +268,7 @@ class TaskEditor(general.Div):
         super().__init__(size, pos)
         self.task = task
         self.surface.fill((255, 0, 0))
+        self.selected_area = None
 
         # Enregistrer
         self.save = general.Button(
@@ -287,22 +291,79 @@ class TaskEditor(general.Div):
             (0, 100)
         )
 
-    def update_text(self, events: pygame.event.Event):
-        self.nom_input.update(events)
-        self.nom_visualizer.change_text(
-            self.nom_input.left,
-            self.nom_input.right
+        # Description
+        self.description_input = pygame_textinput.TextInputManager()
+        self.description_visualizer = general.InputVisualizer(
+            (size[0], size[1] // 4),
+            (0, 500)
         )
+
+    def update_text(self, events: pygame.event.Event):
+        if self.selected_area is not None:
+            if self.selected_area == self.nom_input:
+                self.nom_input.update(events)
+                self.nom_visualizer.change_text(
+                    self.nom_input.left,
+                    self.nom_input.right
+                )
+            elif self.selected_area == self.description_input:
+                self.description_input.update(events)
+                self.description_visualizer.change_text(
+                    self.description_input.left,
+                    self.description_input.right
+                )
 
     def update(self, pos: tuple) -> str:
         if self.save.is_under(pos):
             return "enregistrer"
         elif self.quit.is_under(pos):
             return "quitter"
+        else:
+
+            # Sélection Nom
+            if self.nom_visualizer.is_under(pos):
+                self.selected_area = self.nom_input
+                if (
+                    self.description_visualizer.visible
+                    and self.description_visualizer.screen_text
+                ):
+                    self.description_visualizer.screen_text.pop()
+
+            # Sélection Description
+            elif self.description_visualizer.is_under(pos):
+                self.selected_area = self.description_input
+                if (
+                    self.nom_visualizer.visible
+                    and self.nom_visualizer.screen_text
+                ):
+                    self.nom_visualizer.screen_text.pop()
+
+            # Déselection
+            else:
+
+                # Nom
+                if self.selected_area == self.nom_input:
+                    if (
+                        self.nom_visualizer.visible
+                        and self.nom_visualizer.screen_text
+                    ):
+                        self.nom_visualizer.screen_text.pop()
+
+                # Description
+                elif self.selected_area == self.description_input:
+                    if (
+                        self.description_visualizer.visible
+                        and self.description_visualizer.screen_text
+                    ):
+                        self.description_visualizer.screen_text.pop()
+
+                self.selected_area = None
+
         return ""
 
     def display(self, screen: pygame.surface):
         self.save.display(self.surface)
         self.quit.display(self.surface)
         self.nom_visualizer.display(self.surface)
+        self.description_visualizer.display(self.surface)
         screen.blit(self.surface, self.hit_box)
