@@ -163,7 +163,19 @@ class InputVisualizer(Text):
         self.cursor.fill((255, 255, 255))
         self.cursor_rect = self.cursor.get_rect()
 
+        # Cursor visibility
+        self.time = pygame.time.Clock()
+        self.interval = 500
+        self.reste = 0
+        self.visible = True
+
     def change_text(self, left="", right=""):  # --------------------
+
+        # réinitialisation clignotement curseur
+        if left != self.left:
+            self.reste = 0
+
+        # Modifications des strings
         self.left = left
         self.right = right
         self.raw_text = self.left + self.right
@@ -190,8 +202,16 @@ class InputVisualizer(Text):
             origin=self.cursor_rect.topleft
         )
 
+        # Clignotement de curseur
+        self.time.tick()
+        self.reste += self.time.get_time()
+        if self.reste > self.interval:
+            self.reste %= self.interval
+            self.visible = not self.visible
+
         # ajout du curseur dans les éléments du texte
-        self.screen_text.append((self.cursor, self.cursor_rect))
+        if self.visible:
+            self.screen_text.append((self.cursor, self.cursor_rect))
 
 # ============================================================================
 
