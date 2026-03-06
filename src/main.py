@@ -16,7 +16,7 @@ while running:
     screen.fill(background_color)
     mode.run()
 
-    pygame.key.set_repeat(400, 70)
+    pygame.key.set_repeat(400, 60)
 
     events = pygame.event.get()
     for event in events:
