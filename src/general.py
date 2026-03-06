@@ -127,7 +127,7 @@ class Text(Div):
                 x += word_rect.width
 
             # Si le mot rentre entièrement sur la ligne
-            elif x + word_rect.width < self.hit_box.right - 10:
+            elif x + word_rect.width <= self.hit_box.width:
                 word_rect.topleft = (x, y)
                 x += word_rect.width
 
