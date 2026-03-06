@@ -174,6 +174,7 @@ class InputVisualizer(Text):
         # réinitialisation clignotement curseur
         if left != self.left:
             self.reste = 0
+            self.visible = True
 
         # Modifications des strings
         self.left = left

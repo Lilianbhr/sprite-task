@@ -61,7 +61,13 @@ class TaskList(general.Div):
                 9 * self.surface.get_height() // 10
             ),
             (self.grid.hit_box.right, self.control_bar.hit_box.bottom),
-            {"nom": "task"}
+            {
+                "fini": False,
+                "nom": "",
+                "description": "",
+                "difficulte": 0,
+                "longueur": 0
+            }
         )
 
     def update(self, active_input: str):  # -------------------------
@@ -90,9 +96,13 @@ class TaskList(general.Div):
                     # Grille
                     for task in self.grid.elements:
                         res = task.update(g_pos)
-                        if res:
+                        if res == "delete":
                             self.matching_tasks.remove(task.spec)
                             self.grid.fill_elements(self.matching_tasks)
+                        elif res == "editor":
+                            self.setup_grid_editor()
+                            self.editor.task = task.spec
+                            self.editor.set_info()
 
                 # Pos souris sur l'éditeur de tâches
                 elif self.editor is not None:
@@ -100,26 +110,19 @@ class TaskList(general.Div):
 
                         # Éditeur
                         e_pos = self.editor.get_relative_pos(m_pos)
-                        ree = self.editor.update(e_pos)
+                        res = self.editor.update(e_pos)
 
                         # Enregistrer
-                        if ree == "enregistrer":
-                            nom = self.editor.nom_visualizer.raw_text
-                            desc = self.editor.description_visualizer.raw_text
-                            self.matching_tasks.append(
-                                {
-                                    "fini": False,
-                                    "nom": nom,
-                                    "description": desc,
-                                    "difficulte": 3,
-                                    "longueur": 2
-                                }
-                            )
+                        if res == "enregistrer":
+                            if self.editor.task in self.matching_tasks:
+                                self.matching_tasks.remove(self.editor.task)
+                            self.editor.set_task()
+                            self.matching_tasks.append(self.editor.task)
                             self.grid.fill_elements(self.matching_tasks)
                             self.setup_grid_only()
 
                         # Quitter
-                        elif ree == "quitter":
+                        elif res == "quitter":
                             self.setup_grid_only()
 
     def display(self, screen: pygame.Surface):  # -------------------
@@ -251,6 +254,9 @@ class Task(general.Div):
         elif self.delete.is_under(t_pos):
             return "delete"
 
+        elif self.nom.is_under(t_pos):
+            return "editor"
+
         return ""
 
     def display(self, screen: pygame.Surface):  # -------------------
@@ -295,23 +301,61 @@ class TaskEditor(general.Div):
         self.description_input = pygame_textinput.TextInputManager()
         self.description_visualizer = general.InputVisualizer(
             (size[0], size[1] // 4),
-            (0, 500)
+            (0, self.nom_visualizer.hit_box.bottom + 10)
         )
+
+    def set_task(self):
+        self.task["nom"] = self.nom_visualizer.raw_text
+        self.task["description"] = self.description_visualizer.raw_text
+
+    def set_info(self):
+
+        # Nom
+        self.nom_input.left = self.task["nom"]
+        self.nom_visualizer.change_text(self.nom_input.left, "")
+        self.nom_visualizer.screen_text.pop()
+
+        # Description
+        self.description_input.left = self.task["description"]
+        self.description_visualizer.change_text(
+            self.description_input.left, ""
+        )
+        self.description_visualizer.screen_text.pop()
 
     def update_text(self, events: pygame.event.Event):
         if self.selected_area is not None:
-            if self.selected_area == self.nom_input:
+            if self.selected_area == "nom":
                 self.nom_input.update(events)
                 self.nom_visualizer.change_text(
                     self.nom_input.left,
                     self.nom_input.right
                 )
-            elif self.selected_area == self.description_input:
+            elif self.selected_area == "description":
                 self.description_input.update(events)
                 self.description_visualizer.change_text(
                     self.description_input.left,
                     self.description_input.right
                 )
+
+    def unselect_nom(self):
+        if (
+            self.nom_visualizer.visible
+            and self.nom_visualizer.screen_text
+        ):
+            self.nom_visualizer.screen_text.pop()
+        self.nom_visualizer.screen_text = self.nom_visualizer.wrap(
+            self.nom_visualizer.raw_text
+        )
+
+    def unselect_description(self):
+        if (
+            self.description_visualizer.visible
+            and self.description_visualizer.screen_text
+        ):
+            self.description_visualizer.screen_text.pop()
+        self.description_visualizer.screen_text = self.description_visualizer.wrap(
+            self.description_visualizer.raw_text
+        )
 
     def update(self, pos: tuple) -> str:
         if self.save.is_under(pos):
@@ -322,40 +366,28 @@ class TaskEditor(general.Div):
 
             # Sélection Nom
             if self.nom_visualizer.is_under(pos):
-                self.selected_area = self.nom_input
-                if (
-                    self.description_visualizer.visible
-                    and self.description_visualizer.screen_text
-                ):
-                    self.description_visualizer.screen_text.pop()
+                self.selected_area = "nom"
+                self.nom_input.left = self.nom_visualizer.raw_text
+                self.nom_input.right = ""
+                self.unselect_description()
 
             # Sélection Description
             elif self.description_visualizer.is_under(pos):
-                self.selected_area = self.description_input
-                if (
-                    self.nom_visualizer.visible
-                    and self.nom_visualizer.screen_text
-                ):
-                    self.nom_visualizer.screen_text.pop()
+                self.selected_area = "description"
+                self.description_input.left = self.description_visualizer.raw_text
+                self.description_input.right = ""
+                self.unselect_nom()
 
             # Déselection
             else:
 
                 # Nom
-                if self.selected_area == self.nom_input:
-                    if (
-                        self.nom_visualizer.visible
-                        and self.nom_visualizer.screen_text
-                    ):
-                        self.nom_visualizer.screen_text.pop()
+                if self.selected_area == "nom":
+                    self.unselect_nom()
 
                 # Description
-                elif self.selected_area == self.description_input:
-                    if (
-                        self.description_visualizer.visible
-                        and self.description_visualizer.screen_text
-                    ):
-                        self.description_visualizer.screen_text.pop()
+                elif self.selected_area == "description":
+                    self.unselect_description()
 
                 self.selected_area = None
 
