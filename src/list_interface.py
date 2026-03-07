@@ -65,8 +65,8 @@ class TaskList(general.Div):
                 "fini": False,
                 "nom": "",
                 "description": "",
-                "difficulte": 0,
-                "longueur": 0
+                "difficulté": 1,
+                "longueur": 1
             }
         )
 
@@ -237,7 +237,7 @@ class Task(general.Div):
             size[1] // 7
         )
         self.effort = general.get_screen_text_for(
-            str((spec["difficulte"] + spec["longueur"])/2), size[1] // 5
+            str((spec["difficulté"] + spec["longueur"])/2), size[1] // 5
         )
         self.effort_rect = self.effort.get_rect()
         self.effort_rect.topright = (size[0], 0)
@@ -306,7 +306,7 @@ class TaskEditor(general.Div):
             7
         )
 
-        # Difficultée
+        # Difficulté
         self.difficulty = general.Scale(
             (size[0], size[1] // 10),
             (0, self.description_visualizer.hit_box.bottom + 30),
@@ -316,6 +316,7 @@ class TaskEditor(general.Div):
     def set_task(self):
         self.task["nom"] = self.nom_visualizer.raw_text
         self.task["description"] = self.description_visualizer.raw_text
+        self.task["difficulté"] = self.difficulty.value
 
     def set_info(self):
 
@@ -330,6 +331,10 @@ class TaskEditor(general.Div):
             self.description_input.left, ""
         )
         self.description_visualizer.screen_text.pop()
+
+        # Difficulté
+        self.difficulty.value = self.task["difficulté"]
+        self.difficulty.set_elements()
 
     def update_text(self, events: pygame.event.Event):
         if self.selected_area is not None:
