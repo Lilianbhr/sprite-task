@@ -293,15 +293,17 @@ class TaskEditor(general.Div):
         # Nom
         self.nom_input = pygame_textinput.TextInputManager()
         self.nom_visualizer = general.InputVisualizer(
-            (size[0], size[1] // 4),
-            (0, 100)
+            (size[0], size[1] // 8),
+            (0, 100),
+            3
         )
 
         # Description
         self.description_input = pygame_textinput.TextInputManager()
         self.description_visualizer = general.InputVisualizer(
             (size[0], size[1] // 4),
-            (0, self.nom_visualizer.hit_box.bottom + 10)
+            (0, self.nom_visualizer.hit_box.bottom + 10),
+            7
         )
 
     def set_task(self):
