@@ -306,6 +306,13 @@ class TaskEditor(general.Div):
             7
         )
 
+        # Difficultée
+        self.difficulty = general.Scale(
+            (size[0], size[1] // 10),
+            (0, self.description_visualizer.hit_box.bottom + 30),
+            5
+        )
+
     def set_task(self):
         self.task["nom"] = self.nom_visualizer.raw_text
         self.task["description"] = self.description_visualizer.raw_text
@@ -364,6 +371,9 @@ class TaskEditor(general.Div):
             return "enregistrer"
         elif self.quit.is_under(pos):
             return "quitter"
+        elif self.difficulty.is_under(pos):
+            rel_pos = self.difficulty.get_relative_pos(pos)
+            self.difficulty.update(rel_pos)
         else:
 
             # Sélection Nom
@@ -400,4 +410,5 @@ class TaskEditor(general.Div):
         self.quit.display(self.surface)
         self.nom_visualizer.display(self.surface)
         self.description_visualizer.display(self.surface)
+        self.difficulty.display(self.surface)
         screen.blit(self.surface, self.hit_box)
