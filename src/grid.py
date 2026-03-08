@@ -1,5 +1,6 @@
 import general
 import pygame
+from text import Text
 
 
 class Grid(general.Div):
@@ -60,7 +61,7 @@ class Task(general.Div):
             (size[1] // 5 + 5, 0),
             "supprimer"
         )
-        self.nom = general.Text(
+        self.nom = Text(
             (9 * size[0] // 10, 2 * size[1] // 3),
             (size[0] // 20, size[1] // 5 + 5),
             spec["nom"],

@@ -2,6 +2,9 @@ import general
 import pygame
 import pygame_textinput
 
+from scale import Scale
+from input_visualizer import InputVisualizer
+
 
 class TaskEditor(general.Div):
     def __init__(self, size: tuple, pos: tuple, task: dict):
@@ -26,7 +29,7 @@ class TaskEditor(general.Div):
 
         # Nom
         self.nom_input = pygame_textinput.TextInputManager()
-        self.nom_visualizer = general.InputVisualizer(
+        self.nom_visualizer = InputVisualizer(
             (size[0], size[1] // 8),
             (0, 100),
             3
@@ -34,21 +37,21 @@ class TaskEditor(general.Div):
 
         # Description
         self.description_input = pygame_textinput.TextInputManager()
-        self.description_visualizer = general.InputVisualizer(
+        self.description_visualizer = InputVisualizer(
             (size[0], size[1] // 4),
             (0, self.nom_visualizer.hit_box.bottom + 10),
             7
         )
 
         # Difficulté
-        self.difficulty = general.Scale(
+        self.difficulty = Scale(
             (size[0], size[1] // 10),
             (0, self.description_visualizer.hit_box.bottom + 30),
             5
         )
 
         # Longueur
-        self.longueur = general.Scale(
+        self.longueur = Scale(
             (size[0], size[1] // 10),
             (0, self.difficulty.hit_box.bottom + 20),
             5
