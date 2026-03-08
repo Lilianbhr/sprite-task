@@ -7,6 +7,10 @@ from input_visualizer import InputVisualizer
 
 
 class TaskEditor(general.Div):
+    """
+    interface permettant d'accéder aux informations
+    d'une tâche et de les modifier
+    """
     def __init__(self, size: tuple, pos: tuple, task: dict):
         super().__init__(size, pos)
         self.task = task
@@ -132,18 +136,24 @@ class TaskEditor(general.Div):
         )
 
     def update(self, pos: tuple) -> str:
+
         if self.save.is_under(pos):
             return "enregistrer"
+
         elif self.quit.is_under(pos):
             return "quitter"
+
         elif self.difficulty.is_under(pos):
             rel_pos = self.difficulty.get_relative_pos(pos)
             self.difficulty.update(rel_pos)
+
         elif self.longueur.is_under(pos):
             rel_pos = self.longueur.get_relative_pos(pos)
             self.longueur.update(rel_pos)
+
         elif self.checkbox.is_under(pos):
             self.checkbox.switch_state()
+
         else:
 
             # Sélection Nom

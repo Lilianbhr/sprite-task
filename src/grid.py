@@ -45,6 +45,7 @@ class Grid(general.Div):
 
 
 class Task(general.Div):
+    """ Élément qui constitue la grille """
     def __init__(self, size: tuple, pos: tuple, spec: dict):
         super().__init__(size, pos)
         self.spec = spec
