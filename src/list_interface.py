@@ -313,10 +313,18 @@ class TaskEditor(general.Div):
             5
         )
 
+        # Longueur
+        self.longueur = general.Scale(
+            (size[0], size[1] // 10),
+            (0, self.difficulty.hit_box.bottom + 20),
+            5
+        )
+
     def set_task(self):
         self.task["nom"] = self.nom_visualizer.raw_text
         self.task["description"] = self.description_visualizer.raw_text
         self.task["difficulté"] = self.difficulty.value
+        self.task["longueur"] = self.longueur.value
 
     def set_info(self):
 
@@ -335,6 +343,10 @@ class TaskEditor(general.Div):
         # Difficulté
         self.difficulty.value = self.task["difficulté"]
         self.difficulty.set_elements()
+
+        # Longueur
+        self.longueur.value = self.task["longueur"]
+        self.longueur.set_elements()
 
     def update_text(self, events: pygame.event.Event):
         if self.selected_area is not None:
@@ -379,6 +391,9 @@ class TaskEditor(general.Div):
         elif self.difficulty.is_under(pos):
             rel_pos = self.difficulty.get_relative_pos(pos)
             self.difficulty.update(rel_pos)
+        elif self.longueur.is_under(pos):
+            rel_pos = self.longueur.get_relative_pos(pos)
+            self.longueur.update(rel_pos)
         else:
 
             # Sélection Nom
@@ -416,4 +431,5 @@ class TaskEditor(general.Div):
         self.nom_visualizer.display(self.surface)
         self.description_visualizer.display(self.surface)
         self.difficulty.display(self.surface)
+        self.longueur.display(self.surface)
         screen.blit(self.surface, self.hit_box)
