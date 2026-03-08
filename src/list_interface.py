@@ -320,11 +320,18 @@ class TaskEditor(general.Div):
             5
         )
 
+        # Checkbox
+        self.checkbox = general.CheckBox(
+            (size[1] // 10, size[1] // 10),
+            (0, self.longueur.hit_box.bottom + 30),
+        )
+
     def set_task(self):
         self.task["nom"] = self.nom_visualizer.raw_text
         self.task["description"] = self.description_visualizer.raw_text
         self.task["difficulté"] = self.difficulty.value
         self.task["longueur"] = self.longueur.value
+        self.task["fini"] = self.checkbox.state
 
     def set_info(self):
 
@@ -347,6 +354,10 @@ class TaskEditor(general.Div):
         # Longueur
         self.longueur.value = self.task["longueur"]
         self.longueur.set_elements()
+
+        # Checkbox
+        self.checkbox.state = self.task["fini"]
+        self.checkbox.color_state()
 
     def update_text(self, events: pygame.event.Event):
         if self.selected_area is not None:
@@ -394,6 +405,8 @@ class TaskEditor(general.Div):
         elif self.longueur.is_under(pos):
             rel_pos = self.longueur.get_relative_pos(pos)
             self.longueur.update(rel_pos)
+        elif self.checkbox.is_under(pos):
+            self.checkbox.switch_state()
         else:
 
             # Sélection Nom
@@ -432,4 +445,5 @@ class TaskEditor(general.Div):
         self.description_visualizer.display(self.surface)
         self.difficulty.display(self.surface)
         self.longueur.display(self.surface)
+        self.checkbox.display(self.surface)
         screen.blit(self.surface, self.hit_box)
