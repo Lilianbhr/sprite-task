@@ -1,7 +1,4 @@
-"""
-Ce fichier contient l'ensemble des ressources liées uniquement
-à l'affichage du menu principal de l'application.
-"""
+""" interface principale de l'application """
 
 import pygame
 
