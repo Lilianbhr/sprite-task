@@ -1,12 +1,15 @@
-import general
 import pygame
 import pygame_textinput
 
-from scale import Scale
-from input_visualizer import InputVisualizer
+from src.components.general import Div
+from src.components.general import Button
+from src.components.general import CheckBox
+
+from src.components.scale import Scale
+from src.components.input_visualizer import InputVisualizer
 
 
-class TaskEditor(general.Div):
+class TaskEditor(Div):
     """
     interface permettant d'accéder aux informations
     d'une tâche et de les modifier
@@ -18,14 +21,14 @@ class TaskEditor(general.Div):
         self.selected_area = None
 
         # Enregistrer
-        self.save = general.Button(
+        self.save = Button(
             (100, 50),
             (0, 0),
             "enregistrer"
         )
 
         # Quitter
-        self.quit = general.Button(
+        self.quit = Button(
             (100, 50),
             (100, 0),
             "quitter"
@@ -62,7 +65,7 @@ class TaskEditor(general.Div):
         )
 
         # Checkbox
-        self.checkbox = general.CheckBox(
+        self.checkbox = CheckBox(
             (size[1] // 10, size[1] // 10),
             (0, self.longueur.hit_box.bottom + 30),
         )

@@ -1,5 +1,5 @@
 import pygame
-from text import Text
+from src.components.text import Text
 
 
 class InputVisualizer(Text):

@@ -4,14 +4,15 @@ Ce fichier contient l'ensemble des ressources liées uniquement
 """
 
 import pygame
-import general
 
-from control_bar import ControlBar
-from grid import Grid
-from task_editor import TaskEditor
+from src.components.general import Div
+
+from src.interfaces.control_bar import ControlBar
+from src.interfaces.grid import Grid
+from src.interfaces.task_editor import TaskEditor
 
 
-class TaskList(general.Div):
+class TaskList(Div):
     """
     La boite qui gère les interactions
     de l'utilisateur avec les éléments du menu.

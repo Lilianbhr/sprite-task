@@ -1,8 +1,11 @@
 import pygame
-import general
+
+from src.components.general import Div
+from src.components.general import get_screen_text_for
+from src.components.general import Button
 
 
-class ControlBar(general.Div):
+class ControlBar(Div):
     """
     Barre de contrôles, elle permet de réaliser
     différentes action à l'aide de boutons
@@ -12,7 +15,7 @@ class ControlBar(general.Div):
         self.surface.fill((0, 0, 255))
 
         # Texte - Exploitable par pygame
-        self.text = general.get_screen_text_for("Control Bar", size[1] // 5)
+        self.text = get_screen_text_for("Control Bar", size[1] // 5)
         self.text_rect = self.text.get_rect()
         self.text_rect.center = (
             self.surface.get_width() // 2,
@@ -21,7 +24,7 @@ class ControlBar(general.Div):
 
         # Bouton - 'Ajouter'
         size_b = (size[0] // 10, 2 * size[1] // 3)
-        self.ajouter = general.Button(size_b, (0, 0), "ajouter")
+        self.ajouter = Button(size_b, (0, 0), "ajouter")
         self.ajouter.hit_box.right = 19 * size[0] // 20
         self.ajouter.hit_box.centery = size[1] // 2
 

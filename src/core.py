@@ -1,7 +1,7 @@
 import pygame
 
-from choose_interface import Choose
-from list_interface import TaskList
+from src.interfaces.choose_interface import Choose
+from src.interfaces.list_interface import TaskList
 
 
 class Core:

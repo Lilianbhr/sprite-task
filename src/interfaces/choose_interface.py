@@ -4,10 +4,12 @@ Ce fichier contient l'ensemble des ressources liées uniquement
 """
 
 import pygame
-import general
+
+from src.components.general import Div
+from src.components.general import get_screen_text_for
 
 
-class Choose(general.Div):
+class Choose(Div):
     """
     La boite qui gère les interactions
     de l'utilisateur avec les éléments du menu.
@@ -61,7 +63,7 @@ class Choose(general.Div):
 # ============================================================================
 
 
-class Humeur(general.Div):
+class Humeur(Div):
     """
     Élément particulier du menu
     """
@@ -72,13 +74,13 @@ class Humeur(general.Div):
         self.surface.fill((255, 0, 0))
 
         # Nom - Exploitable par pygame ---------------
-        self.text_nom = general.get_screen_text_for(self.nom, size[1] // 5)
+        self.text_nom = get_screen_text_for(self.nom, size[1] // 5)
         self.nom_rect = self.text_nom.get_rect()
         self.nom_rect.centery = size[1] // 2
         self.nom_rect.left = size[0] // 20
 
         # Description - Exploitable par pygame -------
-        self.text_description = general.get_screen_text_for(
+        self.text_description = get_screen_text_for(
             self.description,
             size[1] // 7
         )

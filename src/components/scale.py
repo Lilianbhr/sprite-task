@@ -1,8 +1,8 @@
-import general
 import pygame
+from src.components.general import Div
 
 
-class Scale(general.Div):
+class Scale(Div):
     """ Permet la séléction d'une valeur dans [1;max_value] """
     def __init__(self, size: tuple, pos: tuple, max_value: int, value=1):
         super().__init__(size, pos)
@@ -56,7 +56,7 @@ class Scale(general.Div):
 # ============================================================================
 
 
-class Graduation(general.Div):
+class Graduation(Div):
     """ Élément qui constitue Scale """
     def __init__(self, size: tuple, pos: tuple, active: bool, value: int):
         super().__init__(size, pos)

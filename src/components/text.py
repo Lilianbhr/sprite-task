@@ -1,8 +1,9 @@
-import general
 import pygame
+from src.components.general import Div
+from src.components.general import get_screen_text_for
 
 
-class Text(general.Div):
+class Text(Div):
     """
     Manage le texte affiché sur une surface pour
     lui permettre de s'adapter à la taille du conteneur.
@@ -39,7 +40,7 @@ class Text(general.Div):
 
         # Récuperation de la taille de chaque mot
         for word in words:
-            screen_word = general.get_screen_text_for(word, self.font_size)
+            screen_word = get_screen_text_for(word, self.font_size)
             word_rect = screen_word.get_rect()
 
             # Si c'est le premier mot sur la ligne

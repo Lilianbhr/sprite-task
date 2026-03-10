@@ -1,9 +1,14 @@
-import general
 import pygame
-from text import Text
+
+from src.components.general import Div
+from src.components.general import CheckBox
+from src.components.general import Button
+from src.components.general import get_screen_text_for
+
+from src.components.text import Text
 
 
-class Grid(general.Div):
+class Grid(Div):
     """
     Grille d'affichage des tâches, elle permet d'afficher et de manager
     les tâches auquelles elle est associée en leur donnant une taille identique
@@ -44,7 +49,7 @@ class Grid(general.Div):
 # ============================================================================
 
 
-class Task(general.Div):
+class Task(Div):
     """ Élément qui constitue la grille """
     def __init__(self, size: tuple, pos: tuple, spec: dict):
         super().__init__(size, pos)
@@ -52,12 +57,12 @@ class Task(general.Div):
         self.surface.fill((0, 0, 50))
 
         # Éléments
-        self.ended = general.CheckBox(
+        self.ended = CheckBox(
             (size[1] // 5, size[1] // 5),
             (0, 0),
             spec["fini"]
         )
-        self.delete = general.Button(
+        self.delete = Button(
             (size[0] // 3, size[1] // 5),
             (size[1] // 5 + 5, 0),
             "supprimer"
@@ -68,7 +73,7 @@ class Task(general.Div):
             spec["nom"],
             size[1] // 7
         )
-        self.effort = general.get_screen_text_for(
+        self.effort = get_screen_text_for(
             str((spec["difficulté"] + spec["longueur"])/2), size[1] // 5
         )
         self.effort_rect = self.effort.get_rect()
