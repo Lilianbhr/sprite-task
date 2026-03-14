@@ -2,6 +2,8 @@
 
 import pygame
 
+from src.database import Database
+
 from src.components.general import Div
 
 from src.interfaces.control_bar import ControlBar
@@ -16,7 +18,17 @@ class TaskList(Div):
     """
     def __init__(self, size: tuple, pos: tuple):
         super().__init__(size, pos)
-        self.matching_tasks = []
+
+        # Fetch data
+        self.database = Database()
+        self.filter = {
+            "fini": False,
+            "diff_min": 1,
+            "diff_max": 5,
+            "long_min": 1,
+            "long_max": 5
+        }
+        self.matching_tasks = self.database.select(self.filter)
 
         # Bar de contrôles
         self.control_bar = ControlBar(
@@ -97,13 +109,25 @@ class TaskList(Div):
                     # Grille
                     for task in self.grid.elements:
                         res = task.update(g_pos)
+
                         if res == "delete":
-                            self.matching_tasks.remove(task.spec)
+                            self.database.rm_task(task.spec)
+                            self.matching_tasks = self.database.select(
+                                self.filter
+                            )
                             self.grid.fill_elements(self.matching_tasks)
+
                         elif res == "editor":
                             self.setup_grid_editor()
                             self.editor.task = task.spec
                             self.editor.set_info()
+
+                        elif res == "end":
+                            self.database.insert_task(task.spec)
+                            self.matching_tasks = self.database.select(
+                                self.filter
+                            )
+                            self.grid.fill_elements(self.matching_tasks)
 
                 # Pos souris sur l'éditeur de tâches
                 elif self.editor is not None:
@@ -115,10 +139,11 @@ class TaskList(Div):
 
                         # Enregistrer
                         if res == "enregistrer":
-                            if self.editor.task in self.matching_tasks:
-                                self.matching_tasks.remove(self.editor.task)
                             self.editor.set_task()
-                            self.matching_tasks.append(self.editor.task)
+                            self.database.insert_task(self.editor.task)
+                            self.matching_tasks = self.database.select(
+                                self.filter
+                            )
                             self.grid.fill_elements(self.matching_tasks)
                             self.setup_grid_only()
 

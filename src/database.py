@@ -98,7 +98,7 @@ class Database:
         self.cursor.execute(sql, (task["id"],))
         self.connection.commit()
 
-    def select_by_filter(self, conditions: dict) -> list:  # --------
+    def select(self, conditions: dict) -> list:  # --------
         sql = """
         SELECT * FROM Tasks WHERE
             fini = ?

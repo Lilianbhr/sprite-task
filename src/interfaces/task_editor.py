@@ -73,7 +73,7 @@ class TaskEditor(Div):
     def set_task(self):
         self.task["nom"] = self.nom_visualizer.raw_text
         self.task["description"] = self.description_visualizer.raw_text
-        self.task["difficulté"] = self.difficulty.value
+        self.task["difficulte"] = self.difficulty.value
         self.task["longueur"] = self.longueur.value
         self.task["fini"] = self.checkbox.state
 
@@ -92,7 +92,7 @@ class TaskEditor(Div):
         self.description_visualizer.screen_text.pop()
 
         # Difficulté
-        self.difficulty.value = self.task["difficulté"]
+        self.difficulty.value = self.task["difficulte"]
         self.difficulty.set_elements()
 
         # Longueur
