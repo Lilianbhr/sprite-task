@@ -74,7 +74,7 @@ class Task(Div):
             size[1] // 7
         )
         self.effort = get_screen_text_for(
-            str((spec["difficulté"] + spec["longueur"])/2), size[1] // 5
+            str((spec["difficulte"] + spec["longueur"])/2), size[1] // 5
         )
         self.effort_rect = self.effort.get_rect()
         self.effort_rect.topright = (size[0], 0)
@@ -86,6 +86,7 @@ class Task(Div):
         if self.ended.is_under(t_pos):
             self.ended.switch_state()
             self.spec["fini"] = self.ended.get_state()
+            return "end"
 
         # Delete
         elif self.delete.is_under(t_pos):
