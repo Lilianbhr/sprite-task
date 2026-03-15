@@ -1,6 +1,6 @@
 import pygame
 
-from src.components.general import Div, Button
+from src.components.general import Div, Button, CheckBox
 from src.components.scale import Scale
 
 
@@ -23,6 +23,9 @@ class FilterEditor(Div):
             (100, 0),
             "quitter"
         )
+
+        # Fini
+        self.fini = CheckBox((50, 50), (0, size[1] // 5))
 
         scales_size = (size[0], size[1] // 20)
 
@@ -58,12 +61,40 @@ class FilterEditor(Div):
             direction=-1
         )
 
+        self.set_info()
+
+    def set_info(self):
+        self.fini.state = self.conditions["fini"]
+        self.fini.color_state()
+
+        self.diff_min.value = self.conditions["diff_min"]
+        self.diff_min.set_elements()
+
+        self.diff_max.value = self.conditions["diff_max"]
+        self.diff_max.set_elements()
+
+        self.long_min.value = self.conditions["long_min"]
+        self.long_min.set_elements()
+
+        self.long_max.value = self.conditions["long_max"]
+        self.long_max.set_elements()
+
+    def set_filter(self):
+        self.conditions["fini"] = self.fini.state
+        self.conditions["diff_min"] = self.diff_min.value
+        self.conditions["diff_max"] = self.diff_max.value
+        self.conditions["long_min"] = self.long_min.value
+        self.conditions["long_max"] = self.long_max.value
+
     def update(self, pos: tuple) -> str:
         if self.save.is_under(pos):
             return "enregistrer"
 
         elif self.quit.is_under(pos):
             return "quitter"
+
+        elif self.fini.is_under(pos):
+            self.fini.switch_state()
 
         elif self.diff_min.is_under(pos):
             s_pos = self.diff_min.get_relative_pos(pos)
@@ -87,6 +118,7 @@ class FilterEditor(Div):
     def display(self, screen: pygame.surface):
         self.save.display(self.surface)
         self.quit.display(self.surface)
+        self.fini.display(self.surface)
 
         self.diff_min.display(self.surface)
         self.diff_max.display(self.surface)

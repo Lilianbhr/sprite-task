@@ -20,7 +20,7 @@ class Body(Div):
             "long_min": 1,
             "long_max": 5
         }
-        self.matching_tasks = self.database.select(self.filter)
+        self.matching_tasks = []
 
         self.mode_code = 0  # 1 for task_editor, 2 for filter_editor
         self.grid = None
@@ -52,17 +52,7 @@ class Body(Div):
                 )
 
             elif self.mode_code == 2:
-                self.filter_editor = FilterEditor(
-                    side_size,
-                    side_pos,
-                    {
-                        "fini": False,
-                        "diff_min": 1,
-                        "diff_max": 5,
-                        "long_min": 1,
-                        "long_max": 5
-                    }
-                )
+                self.filter_editor = FilterEditor(side_size, side_pos, self.filter)
 
             self.grid = Grid(
                 (3 * self.surface.get_width() // 5, self.hit_box.height),
@@ -77,7 +67,12 @@ class Body(Div):
                 (4, 4)
             )
 
+        self.matching_tasks = self.database.select(self.filter)
+        self.grid.fill_elements(self.matching_tasks)
+
     def update(self, b_pos=(-1, -1), modificator="", data=()):
+
+        # Grille
         if self.grid.is_under(b_pos) and b_pos != (-1, -1):
             g_pos = self.grid.get_relative_pos(b_pos)
 
@@ -85,6 +80,7 @@ class Body(Div):
                 if task.is_under(g_pos):
                     t_pos = task.get_relative_pos(g_pos)
 
+                    # Task
                     res = task.update(t_pos)
                     if res == "delete":
                         self.database.rm_task(task.spec)
@@ -105,6 +101,7 @@ class Body(Div):
                         )
                         self.grid.fill_elements(self.matching_tasks)
 
+        # TaskEditor
         elif self.mode_code == 1:
             if modificator == "update_text":
                 self.task_editor.update_text(data)
@@ -124,12 +121,15 @@ class Body(Div):
                     elif res == "quitter":
                         self.set_mode(0)
 
+        # FilterEditor
         elif self.mode_code == 2:
             if self.filter_editor.is_under(b_pos):
                 f_pos = self.filter_editor.get_relative_pos(b_pos)
 
                 res = self.filter_editor.update(f_pos)
                 if res == "enregistrer":
+                    self.filter_editor.set_filter()
+                    self.filter = self.filter_editor.conditions
                     self.set_mode(0)
 
                 elif res == "quitter":
