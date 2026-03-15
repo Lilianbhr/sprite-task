@@ -5,7 +5,7 @@ from src.interfaces.list_interface import TaskList
 pygame.init()
 
 # Window
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode()
 pygame.display.set_caption("SpriteTask")
 background_color = (255, 255, 255)
 

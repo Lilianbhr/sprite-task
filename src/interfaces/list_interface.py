@@ -42,8 +42,10 @@ class TaskList(Div):
                     bc_pos = self.control_bar.get_relative_pos(m_pos)
 
                     ret = self.control_bar.update(bc_pos)
-                    if ret:
+                    if ret == "ajouter":
                         self.body.set_mode(1)
+                    elif ret == "filtrer":
+                        self.body.set_mode(2)
 
                 # Pos souris sur le corps
                 if self.body.is_under(m_pos):

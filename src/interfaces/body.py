@@ -107,7 +107,6 @@ class Body(Div):
 
         elif self.mode_code == 1:
             if modificator == "update_text":
-                print("here")
                 self.task_editor.update_text(data)
             else:
                 if self.task_editor.is_under(b_pos):
@@ -124,6 +123,17 @@ class Body(Div):
 
                     elif res == "quitter":
                         self.set_mode(0)
+
+        elif self.mode_code == 2:
+            if self.filter_editor.is_under(b_pos):
+                f_pos = self.filter_editor.get_relative_pos(b_pos)
+
+                res = self.filter_editor.update(f_pos)
+                if res == "enregistrer":
+                    self.set_mode(0)
+
+                elif res == "quitter":
+                    self.set_mode(0)
 
     def display(self, screen: pygame.Surface):
         self.grid.display(self.surface)
