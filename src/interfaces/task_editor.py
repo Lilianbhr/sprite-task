@@ -141,6 +141,7 @@ class TaskEditor(Div):
     def update(self, pos: tuple) -> str:
 
         if self.save.is_under(pos):
+            self.set_task()
             return "enregistrer"
 
         elif self.quit.is_under(pos):

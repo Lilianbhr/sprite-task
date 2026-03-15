@@ -51,5 +51,5 @@ class Core:
 
     def update_text(self, events: pygame.event.Event):
         if type(self.current_mode) is TaskList:
-            if self.current_mode.editor is not None:
-                self.current_mode.editor.update_text(events)
+            if self.current_mode.body.mode_code == 1:
+                self.current_mode.body.update(modificator="update_text", data=events)

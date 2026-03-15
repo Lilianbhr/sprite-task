@@ -1,9 +1,11 @@
 import pygame
 from core import Core
+from src.interfaces.list_interface import TaskList
+
 pygame.init()
 
 # Window
-screen = pygame.display.set_mode()
+screen = pygame.display.set_mode((500, 500))
 pygame.display.set_caption("SpriteTask")
 background_color = (255, 255, 255)
 
@@ -11,12 +13,12 @@ background_color = (255, 255, 255)
 mode = Core(screen)
 clock = pygame.time.Clock()
 running = True
+pygame.key.set_repeat(400, 60)
+
 while running:
 
     screen.fill(background_color)
     mode.run()
-
-    pygame.key.set_repeat(400, 60)
 
     events = pygame.event.get()
     for event in events:
@@ -33,4 +35,6 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
+if mode.current_mode is TaskList:
+    mode.body.database.close()
 pygame.quit()
