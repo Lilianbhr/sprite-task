@@ -9,9 +9,14 @@ from src.interfaces.filter_editor import FilterEditor
 
 
 class Body(Div):
+    """
+    Conteneur administrant la grille, la base de données ainsi que
+    les changement d'interfaces, notament avec TaskEditor et FilterEditor
+    """
     def __init__(self, size: tuple, pos: tuple):
         super().__init__(size, pos)
 
+        # Data
         self.database = Database()
         self.filter = {
             "fini": False,
@@ -22,6 +27,7 @@ class Body(Div):
         }
         self.matching_tasks = []
 
+        # Mode
         self.mode_code = 0  # 1 for task_editor, 2 for filter_editor
         self.grid = None
         self.task_editor = None
@@ -33,11 +39,14 @@ class Body(Div):
         self.setup()
 
     def setup(self):
+
+        # Si un menu latéral est actif
         if self.mode_code:
 
             side_size = (2 * self.hit_box.width // 5, self.hit_box.height)
             side_pos = (self.hit_box.width - side_size[0], 0)
 
+            # TaskEditor
             if self.mode_code == 1:
                 self.task_editor = TaskEditor(
                     side_size,
@@ -51,15 +60,18 @@ class Body(Div):
                     }
                 )
 
+            # FilterEditor
             elif self.mode_code == 2:
                 self.filter_editor = FilterEditor(side_size, side_pos, self.filter)
 
+            # Grille
             self.grid = Grid(
                 (3 * self.surface.get_width() // 5, self.hit_box.height),
                 (0, 0),
                 (3, 4)
             )
 
+        # Pas de menu latéral
         else:
             self.grid = Grid(
                 (self.hit_box.width, self.hit_box.height),
@@ -136,9 +148,13 @@ class Body(Div):
                     self.set_mode(0)
 
     def display(self, screen: pygame.Surface):
+
         self.grid.display(self.surface)
+
         if self.mode_code == 1:
             self.task_editor.display(self.surface)
+
         elif self.mode_code == 2:
             self.filter_editor.display(self.surface)
+
         screen.blit(self.surface, self.hit_box)

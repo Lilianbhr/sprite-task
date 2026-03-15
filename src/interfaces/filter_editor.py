@@ -5,6 +5,7 @@ from src.components.scale import Scale
 
 
 class FilterEditor(Div):
+    """ interface permettant de controller le filtre actif """
     def __init__(self, size: tuple, pos: tuple, conditions: dict):
         super().__init__(size, pos)
         self.conditions = conditions
@@ -63,7 +64,7 @@ class FilterEditor(Div):
 
         self.set_info()
 
-    def set_info(self):
+    def set_info(self):  # ------------------------------------------
         self.fini.state = self.conditions["fini"]
         self.fini.color_state()
 
@@ -79,14 +80,14 @@ class FilterEditor(Div):
         self.long_max.value = self.conditions["long_max"]
         self.long_max.set_elements()
 
-    def set_filter(self):
+    def set_filter(self):  # ----------------------------------------
         self.conditions["fini"] = self.fini.state
         self.conditions["diff_min"] = self.diff_min.value
         self.conditions["diff_max"] = self.diff_max.value
         self.conditions["long_min"] = self.long_min.value
         self.conditions["long_max"] = self.long_max.value
 
-    def update(self, pos: tuple) -> str:
+    def update(self, pos: tuple) -> str:  # -------------------------
         if self.save.is_under(pos):
             return "enregistrer"
 
@@ -115,9 +116,10 @@ class FilterEditor(Div):
         else:
             return ""
 
-    def display(self, screen: pygame.surface):
+    def display(self, screen: pygame.surface):  # -------------------
         self.save.display(self.surface)
         self.quit.display(self.surface)
+
         self.fini.display(self.surface)
 
         self.diff_min.display(self.surface)

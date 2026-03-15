@@ -35,6 +35,6 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
-if mode.current_mode is TaskList:
-    mode.body.database.close()
+if type(mode.current_mode) is TaskList:
+    mode.current_mode.body.database.close()
 pygame.quit()

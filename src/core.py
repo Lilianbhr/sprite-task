@@ -49,7 +49,7 @@ class Core:
             )
             self.current_mode = TaskList(size, pos)
 
-    def update_text(self, events: pygame.event.Event):
+    def update_text(self, events: pygame.event.Event):  # -----------
         if type(self.current_mode) is TaskList:
             if self.current_mode.body.mode_code == 1:
                 self.current_mode.body.update(modificator="update_text", data=events)

@@ -70,14 +70,14 @@ class TaskEditor(Div):
             (0, self.longueur.hit_box.bottom + 30),
         )
 
-    def set_task(self):
+    def set_task(self):  # ------------------------------------------
         self.task["nom"] = self.nom_visualizer.raw_text
         self.task["description"] = self.description_visualizer.raw_text
         self.task["difficulte"] = self.difficulty.value
         self.task["longueur"] = self.longueur.value
         self.task["fini"] = self.checkbox.state
 
-    def set_info(self):
+    def set_info(self):  # ------------------------------------------
 
         # Nom
         self.nom_input.left = self.task["nom"]
@@ -103,7 +103,7 @@ class TaskEditor(Div):
         self.checkbox.state = self.task["fini"]
         self.checkbox.color_state()
 
-    def update_text(self, events: pygame.event.Event):
+    def update_text(self, events: pygame.event.Event):  # -----------
         if self.selected_area is not None:
             if self.selected_area == "nom":
                 self.nom_input.update(events)
@@ -118,7 +118,7 @@ class TaskEditor(Div):
                     self.description_input.right
                 )
 
-    def unselect_nom(self):
+    def unselect_nom(self):  # --------------------------------------
         if (
             self.nom_visualizer.visible
             and self.nom_visualizer.screen_text
@@ -128,7 +128,7 @@ class TaskEditor(Div):
             self.nom_visualizer.raw_text
         )
 
-    def unselect_description(self):
+    def unselect_description(self):  # ------------------------------
         if (
             self.description_visualizer.visible
             and self.description_visualizer.screen_text
@@ -138,7 +138,7 @@ class TaskEditor(Div):
             self.description_visualizer.raw_text
         )
 
-    def update(self, pos: tuple) -> str:
+    def update(self, pos: tuple) -> str:  # -------------------------
 
         if self.save.is_under(pos):
             self.set_task()
@@ -189,12 +189,16 @@ class TaskEditor(Div):
 
         return ""
 
-    def display(self, screen: pygame.surface):
+    def display(self, screen: pygame.surface):  # -------------------
         self.save.display(self.surface)
         self.quit.display(self.surface)
+
         self.nom_visualizer.display(self.surface)
         self.description_visualizer.display(self.surface)
+
         self.difficulty.display(self.surface)
         self.longueur.display(self.surface)
+
         self.checkbox.display(self.surface)
+
         screen.blit(self.surface, self.hit_box)

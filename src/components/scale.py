@@ -7,11 +7,14 @@ class Scale(Div):
     def __init__(self, size: tuple, pos: tuple, max_value: int,
                  value=1, direction=1):
         super().__init__(size, pos)
+
+        # Valuers
         self.max_value = max_value
         self.value = value
         self.direction = direction
-        self.gap = size[0] // 50
 
+        # Visuel
+        self.gap = size[0] // 50
         self.elements = []
         self.set_elements()
 
