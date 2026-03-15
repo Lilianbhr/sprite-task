@@ -1,5 +1,7 @@
 import pygame
 from core import Core
+from src.interfaces.list_interface import TaskList
+
 pygame.init()
 
 # Window
@@ -11,12 +13,12 @@ background_color = (255, 255, 255)
 mode = Core(screen)
 clock = pygame.time.Clock()
 running = True
+pygame.key.set_repeat(400, 60)
+
 while running:
 
     screen.fill(background_color)
     mode.run()
-
-    pygame.key.set_repeat(400, 60)
 
     events = pygame.event.get()
     for event in events:
@@ -33,4 +35,6 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
+if type(mode.current_mode) is TaskList:
+    mode.current_mode.body.database.close()
 pygame.quit()

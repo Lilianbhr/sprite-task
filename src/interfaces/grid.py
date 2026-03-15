@@ -80,19 +80,18 @@ class Task(Div):
         self.effort_rect.topright = (size[0], 0)
 
     def update(self, pos: tuple) -> str:  # -------------------------
-        t_pos = self.get_relative_pos(pos)
 
         # Checkbox
-        if self.ended.is_under(t_pos):
+        if self.ended.is_under(pos):
             self.ended.switch_state()
             self.spec["fini"] = self.ended.get_state()
             return "end"
 
         # Delete
-        elif self.delete.is_under(t_pos):
+        elif self.delete.is_under(pos):
             return "delete"
 
-        elif self.nom.is_under(t_pos):
+        elif self.nom.is_under(pos):
             return "editor"
 
         return ""

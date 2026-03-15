@@ -68,7 +68,7 @@ class CheckBox(Div):
     def color_state(self):  # ---------------------------------------
         """ L'état est représenté visuellement par une couleur. """
         if self.state:
-            self.surface.fill((255, 255, 0))
+            self.surface.fill((0, 255, 255))
         else:
             self.surface.fill((255, 0, 255))
 
