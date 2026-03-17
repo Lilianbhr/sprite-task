@@ -1,7 +1,7 @@
 import pygame
 
 from src.components.general import Div, Button, CheckBox
-from src.components.scale import Scale
+from src.components.scale import Scale, DoubleScale
 
 
 class FilterEditor(Div):
@@ -28,38 +28,24 @@ class FilterEditor(Div):
         # Fini
         self.fini = CheckBox((50, 50), (0, size[1] // 5))
 
-        scales_size = (size[0], size[1] // 20)
+        scales_size = (size[0], size[1] // 10)
 
-        # Diff_min
-        self.diff_min = Scale(
+        # Difficulté
+        self.difficulte = DoubleScale(
             scales_size,
             (0, size[1] // 3),
-            5
-        )
-
-        # Diff_max
-        self.diff_max = Scale(
-            scales_size,
-            (0, self.diff_min.hit_box.bottom + 10),
             5,
-            value=5,
-            direction=-1
+            self.conditions["diff_min"],
+            self.conditions["diff_max"]
         )
 
-        # Long_min
-        self.long_min = Scale(
+        # Longueur
+        self.longueur = DoubleScale(
             scales_size,
-            (0, self.diff_max.hit_box.bottom + 30),
-            5
-        )
-
-        # Long_max
-        self.long_max = Scale(
-            scales_size,
-            (0, self.long_min.hit_box.bottom + 10),
+            (0, self.difficulte.hit_box.bottom + 30),
             5,
-            value=5,
-            direction=-1
+            self.conditions["long_min"],
+            self.conditions["long_max"]
         )
 
         self.set_info()
@@ -68,24 +54,22 @@ class FilterEditor(Div):
         self.fini.state = self.conditions["fini"]
         self.fini.color_state()
 
-        self.diff_min.value = self.conditions["diff_min"]
-        self.diff_min.set_elements()
+        self.difficulte.set_limits(
+            self.conditions["diff_min"],
+            self.conditions["diff_max"]
+        )
 
-        self.diff_max.value = self.conditions["diff_max"]
-        self.diff_max.set_elements()
-
-        self.long_min.value = self.conditions["long_min"]
-        self.long_min.set_elements()
-
-        self.long_max.value = self.conditions["long_max"]
-        self.long_max.set_elements()
+        self.longueur.set_limits(
+            self.conditions["long_min"],
+            self.conditions["long_max"]
+        )
 
     def set_filter(self):  # ----------------------------------------
         self.conditions["fini"] = self.fini.state
-        self.conditions["diff_min"] = self.diff_min.value
-        self.conditions["diff_max"] = self.diff_max.value
-        self.conditions["long_min"] = self.long_min.value
-        self.conditions["long_max"] = self.long_max.value
+        self.conditions["diff_min"] = self.difficulte.min_scale.value
+        self.conditions["diff_max"] = self.difficulte.max_scale.value
+        self.conditions["long_min"] = self.longueur.min_scale.value
+        self.conditions["long_max"] = self.longueur.max_scale.value
 
     def update(self, pos: tuple) -> str:  # -------------------------
         if self.save.is_under(pos):
@@ -97,21 +81,13 @@ class FilterEditor(Div):
         elif self.fini.is_under(pos):
             self.fini.switch_state()
 
-        elif self.diff_min.is_under(pos):
-            s_pos = self.diff_min.get_relative_pos(pos)
-            self.diff_min.update(s_pos)
+        elif self.difficulte.is_under(pos):
+            d_pos = self.difficulte.get_relative_pos(pos)
+            self.difficulte.update(d_pos)
 
-        elif self.diff_max.is_under(pos):
-            s_pos = self.diff_max.get_relative_pos(pos)
-            self.diff_max.update(s_pos)
-
-        elif self.long_min.is_under(pos):
-            s_pos = self.long_min.get_relative_pos(pos)
-            self.long_min.update(s_pos)
-
-        elif self.long_max.is_under(pos):
-            s_pos = self.long_max.get_relative_pos(pos)
-            self.long_max.update(s_pos)
+        elif self.longueur.is_under(pos):
+            s_pos = self.longueur.get_relative_pos(pos)
+            self.longueur.update(s_pos)
 
         else:
             return ""
@@ -122,9 +98,7 @@ class FilterEditor(Div):
 
         self.fini.display(self.surface)
 
-        self.diff_min.display(self.surface)
-        self.diff_max.display(self.surface)
-        self.long_min.display(self.surface)
-        self.long_max.display(self.surface)
+        self.difficulte.display(self.surface)
+        self.longueur.display(self.surface)
 
         screen.blit(self.surface, self.hit_box)
