@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+title __cas d'utilisation (MVP)__
+
+:User: as U
+
+package Liste_de_tâches {
+    (créer une tache) as new
+    (supprimer une tache) as remove
+    (compléter une tache) as complete
+    (modifier une tache) as modify
+}
+
+package Liste_intelligente {
+    (sélectionner humeur) as select
+    (filtrer les tâches) as filter
+}
+
+U --> new
+U --> remove
+U --> complete
+U --> modify
+U --> select
+U --> filter
+
+@enduml
