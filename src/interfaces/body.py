@@ -13,18 +13,12 @@ class Body(Div):
     Conteneur administrant la grille, la base de données ainsi que
     les changement d'interfaces, notament avec TaskEditor et FilterEditor
     """
-    def __init__(self, size: tuple, pos: tuple):
+    def __init__(self, size: tuple, pos: tuple, cond: dict):
         super().__init__(size, pos)
 
         # Data
         self.database = Database()
-        self.filter = {
-            "fini": False,
-            "diff_min": 1,
-            "diff_max": 5,
-            "long_min": 1,
-            "long_max": 5
-        }
+        self.filter = cond
         self.matching_tasks = []
 
         # Mode

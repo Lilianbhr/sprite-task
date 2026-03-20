@@ -1,5 +1,6 @@
 import pygame
 
+from src.constantes.filtres import ADAPTER
 from src.interfaces.choose_interface import Choose
 from src.interfaces.list_interface import TaskList
 
@@ -47,7 +48,7 @@ class Core:
                 self.screen.get_width() // 2 - size[0] // 2,
                 self.screen.get_height() // 2 - size[1] // 2
             )
-            self.current_mode = TaskList(size, pos)
+            self.current_mode = TaskList(size, pos, ADAPTER[ret])
 
     def update_text(self, events: pygame.event.Event):  # -----------
         if type(self.current_mode) is TaskList:
