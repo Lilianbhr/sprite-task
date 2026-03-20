@@ -148,6 +148,24 @@ class Body(Div):
                     ]
                     self.filter_editor.set_info()
 
+                elif res == "SH":
+                    self.filter_editor.conditions = ADAPTER[
+                        "SCRAP HUNTER"
+                    ]
+                    self.filter_editor.set_info()
+
+                elif res == "SC":
+                    self.filter_editor.conditions = ADAPTER[
+                        "STRIKE COMMANDER"
+                    ]
+                    self.filter_editor.set_info()
+
+                elif res == "WO":
+                    self.filter_editor.conditions = ADAPTER[
+                        "WARLORD OVERDRIVE"
+                    ]
+                    self.filter_editor.set_info()
+
     def display(self, screen: pygame.Surface):
 
         self.grid.display(self.surface)

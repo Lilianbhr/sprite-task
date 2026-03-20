@@ -57,6 +57,23 @@ class FilterEditor(Div):
 
         self.set_info()
 
+        # Changement de mode
+        self.SH = Button(
+            (150, 50),
+            (0, self.longueur.hit_box.bottom + 50),
+            "scrap hunter"
+        )
+        self.SC = Button(
+            (150, 50),
+            (160, self.SH.hit_box.top),
+            "strike commander"
+        )
+        self.WO = Button(
+            (150, 50),
+            (320, self.SH.hit_box.top),
+            "warlord overdrive"
+        )
+
     def set_info(self):  # ------------------------------------------
         self.fini.state = self.conditions["fini"]
         self.fini.color_state()
@@ -88,6 +105,15 @@ class FilterEditor(Div):
         elif self.reinitialize.is_under(pos):
             return "reinitialiser"
 
+        elif self.SH.is_under(pos):
+            return "SH"
+
+        elif self.SC.is_under(pos):
+            return "SC"
+
+        elif self.WO.is_under(pos):
+            return "WO"
+
         elif self.fini.is_under(pos):
             self.fini.switch_state()
 
@@ -111,5 +137,9 @@ class FilterEditor(Div):
 
         self.difficulte.display(self.surface)
         self.longueur.display(self.surface)
+
+        self.SH.display(self.surface)
+        self.SC.display(self.surface)
+        self.WO.display(self.surface)
 
         screen.blit(self.surface, self.hit_box)
