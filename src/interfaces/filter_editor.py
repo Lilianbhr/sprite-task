@@ -25,6 +25,13 @@ class FilterEditor(Div):
             "quitter"
         )
 
+        # Réinitialiser
+        self.reinitialize = Button(
+            (100, 50),
+            (200, 0),
+            "reinitialiser"
+        )
+
         # Fini
         self.fini = CheckBox((50, 50), (0, size[1] // 5))
 
@@ -49,6 +56,23 @@ class FilterEditor(Div):
         )
 
         self.set_info()
+
+        # Changement de mode
+        self.SH = Button(
+            (150, 50),
+            (0, self.longueur.hit_box.bottom + 50),
+            "scrap hunter"
+        )
+        self.SC = Button(
+            (150, 50),
+            (160, self.SH.hit_box.top),
+            "strike commander"
+        )
+        self.WO = Button(
+            (150, 50),
+            (320, self.SH.hit_box.top),
+            "warlord overdrive"
+        )
 
     def set_info(self):  # ------------------------------------------
         self.fini.state = self.conditions["fini"]
@@ -78,6 +102,18 @@ class FilterEditor(Div):
         elif self.quit.is_under(pos):
             return "quitter"
 
+        elif self.reinitialize.is_under(pos):
+            return "reinitialiser"
+
+        elif self.SH.is_under(pos):
+            return "SH"
+
+        elif self.SC.is_under(pos):
+            return "SC"
+
+        elif self.WO.is_under(pos):
+            return "WO"
+
         elif self.fini.is_under(pos):
             self.fini.switch_state()
 
@@ -95,10 +131,15 @@ class FilterEditor(Div):
     def display(self, screen: pygame.surface):  # -------------------
         self.save.display(self.surface)
         self.quit.display(self.surface)
+        self.reinitialize.display(self.surface)
 
         self.fini.display(self.surface)
 
         self.difficulte.display(self.surface)
         self.longueur.display(self.surface)
+
+        self.SH.display(self.surface)
+        self.SC.display(self.surface)
+        self.WO.display(self.surface)
 
         screen.blit(self.surface, self.hit_box)

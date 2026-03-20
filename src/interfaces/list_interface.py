@@ -13,7 +13,7 @@ class TaskList(Div):
     La boite qui gère les interactions
     de l'utilisateur avec les éléments du menu.
     """
-    def __init__(self, size: tuple, pos: tuple):
+    def __init__(self, size: tuple, pos: tuple, cond: dict):
         super().__init__(size, pos)
         # Bar de contrôles
         self.control_bar = ControlBar(
@@ -24,7 +24,8 @@ class TaskList(Div):
         # Body
         self.body = Body(
             (self.hit_box.width, 9 * self.hit_box.height // 10),
-            (0, self.control_bar.hit_box.bottom)
+            (0, self.control_bar.hit_box.bottom),
+            cond
         )
 
     def update(self, active_input: str):  # -------------------------

@@ -1,6 +1,7 @@
 import pygame
 
 from src.components.general import Div
+from src.constantes.filtres import ADAPTER
 from src.database import Database
 
 from src.interfaces.grid import Grid
@@ -13,18 +14,12 @@ class Body(Div):
     Conteneur administrant la grille, la base de données ainsi que
     les changement d'interfaces, notament avec TaskEditor et FilterEditor
     """
-    def __init__(self, size: tuple, pos: tuple):
+    def __init__(self, size: tuple, pos: tuple, cond: dict):
         super().__init__(size, pos)
 
         # Data
         self.database = Database()
-        self.filter = {
-            "fini": False,
-            "diff_min": 1,
-            "diff_max": 5,
-            "long_min": 1,
-            "long_max": 5
-        }
+        self.filter = cond
         self.matching_tasks = []
 
         # Mode
@@ -146,6 +141,30 @@ class Body(Div):
 
                 elif res == "quitter":
                     self.set_mode(0)
+
+                elif res == "reinitialiser":
+                    self.filter_editor.conditions = ADAPTER[
+                        "OMNICYDE PROTOCOL"
+                    ]
+                    self.filter_editor.set_info()
+
+                elif res == "SH":
+                    self.filter_editor.conditions = ADAPTER[
+                        "SCRAP HUNTER"
+                    ]
+                    self.filter_editor.set_info()
+
+                elif res == "SC":
+                    self.filter_editor.conditions = ADAPTER[
+                        "STRIKE COMMANDER"
+                    ]
+                    self.filter_editor.set_info()
+
+                elif res == "WO":
+                    self.filter_editor.conditions = ADAPTER[
+                        "WARLORD OVERDRIVE"
+                    ]
+                    self.filter_editor.set_info()
 
     def display(self, screen: pygame.Surface):
 

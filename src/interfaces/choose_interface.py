@@ -24,16 +24,36 @@ class Choose(Div):
         tile_w = surface_size[0]
 
         self.elements.append(
-            Humeur("mood_1", "mood_1", (tile_w, tile_h), (0, 0))
+            Humeur(
+                "SCRAP HUNTER",
+                "Récupération rapide. Élimine les cibles mineures sans pitié.",
+                (tile_w, tile_h),
+                (0, 0)
+            )
         )
         self.elements.append(
-            Humeur("mood_2", "mood_2", (tile_w, tile_h), (0, tile_h))
+            Humeur(
+                "STRIKE COMMANDER",
+                "Tactique et efficace. Nettoyage de zone en cours.",
+                (tile_w, tile_h),
+                (0, tile_h)
+            )
         )
         self.elements.append(
-            Humeur("mood_3", "mood_3", (tile_w, tile_h), (0, tile_h * 2))
+            Humeur(
+                "WARLORD OVERDRIVE",
+                "Écrase les boss de ta liste. Engagement total exigé.",
+                (tile_w, tile_h),
+                (0, tile_h * 2)
+            )
         )
         self.elements.append(
-            Humeur("ignorer", "ignorer", (tile_w, tile_h), (0, tile_h * 3))
+            Humeur(
+                "OMNICYDE PROTOCOL",
+                "Aucune distinction, toutes les cibles sont prioritaires.",
+                (tile_w, tile_h),
+                (0, tile_h * 3)
+            )
         )
 
     def update(self, active_input: str) -> str:  # ------------------
