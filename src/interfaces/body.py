@@ -1,6 +1,7 @@
 import pygame
 
 from src.components.general import Div
+from src.constantes.filtres import ADAPTER
 from src.database import Database
 
 from src.interfaces.grid import Grid
@@ -140,6 +141,12 @@ class Body(Div):
 
                 elif res == "quitter":
                     self.set_mode(0)
+
+                elif res == "reinitialiser":
+                    self.filter_editor.conditions = ADAPTER[
+                        "OMNICYDE PROTOCOL"
+                    ]
+                    self.filter_editor.set_info()
 
     def display(self, screen: pygame.Surface):
 

@@ -25,6 +25,13 @@ class FilterEditor(Div):
             "quitter"
         )
 
+        # Réinitialiser
+        self.reinitialize = Button(
+            (100, 50),
+            (200, 0),
+            "reinitialiser"
+        )
+
         # Fini
         self.fini = CheckBox((50, 50), (0, size[1] // 5))
 
@@ -78,6 +85,9 @@ class FilterEditor(Div):
         elif self.quit.is_under(pos):
             return "quitter"
 
+        elif self.reinitialize.is_under(pos):
+            return "reinitialiser"
+
         elif self.fini.is_under(pos):
             self.fini.switch_state()
 
@@ -95,6 +105,7 @@ class FilterEditor(Div):
     def display(self, screen: pygame.surface):  # -------------------
         self.save.display(self.surface)
         self.quit.display(self.surface)
+        self.reinitialize.display(self.surface)
 
         self.fini.display(self.surface)
 

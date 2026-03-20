@@ -89,7 +89,10 @@ class DoubleScale(Div):
         )
 
     def set_limits(self, mini, maxi):
+        self.min_scale.value = mini
         self.min_scale.limit = maxi
+
+        self.max_scale.value = maxi
         self.max_scale.limit = mini
 
         self.min_scale.set_elements()
