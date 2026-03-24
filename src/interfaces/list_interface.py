@@ -3,6 +3,7 @@
 import pygame
 
 from src.components.general import Div
+from src.constantes.theme import BG_COLOR
 
 from src.interfaces.control_bar import ControlBar
 from src.interfaces.body import Body
@@ -14,7 +15,7 @@ class TaskList(Div):
     de l'utilisateur avec les éléments du menu.
     """
     def __init__(self, size: tuple, pos: tuple, cond: dict):
-        super().__init__(size, pos)
+        super().__init__(size, pos, BG_COLOR)
         # Bar de contrôles
         self.control_bar = ControlBar(
             (self.hit_box.width, self.hit_box.height // 10),
@@ -54,7 +55,7 @@ class TaskList(Div):
                     self.body.update(b_pos=b_pos)
 
     def display(self, screen: pygame.Surface):  # -------------------
-        self.surface.fill((0, 0, 0))
+        self.surface.fill(self.color)
         self.control_bar.display(self.surface)
         self.body.display(self.surface)
         screen.blit(self.surface, self.hit_box)

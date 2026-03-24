@@ -1,6 +1,7 @@
 import pygame
 from src.components.general import Div
 from src.components.general import get_screen_text_for
+from src.constantes.theme import BG_COLOR
 
 
 class Text(Div):
@@ -8,8 +9,9 @@ class Text(Div):
     Manage le texte affiché sur une surface pour
     lui permettre de s'adapter à la taille du conteneur.
     """
-    def __init__(self, size: tuple, pos: tuple, text: str, font_size: int):
-        super().__init__(size, pos)
+    def __init__(self, size: tuple, pos: tuple, color: tuple,
+                 text: str, font_size: int):
+        super().__init__(size, pos, color)
         self.raw_text = text
         self.font_size = font_size
 
@@ -65,7 +67,7 @@ class Text(Div):
         return screen_text
 
     def display(self, screen: pygame.Surface):  # -------------------
-        self.surface.fill((0, 0, 0))
+        self.surface.fill(self.color)
         for elt in self.screen_text:
             self.surface.blit(elt[0], elt[1])
         screen.blit(self.surface, self.hit_box)

@@ -7,6 +7,7 @@ from src.components.general import CheckBox
 
 from src.components.scale import Scale
 from src.components.input_visualizer import InputVisualizer
+from src.constantes.theme import BORDERS_COLOR, SCRAP_COLOR, WARLORD_COLOR
 
 
 class TaskEditor(Div):
@@ -15,59 +16,62 @@ class TaskEditor(Div):
     d'une tâche et de les modifier
     """
     def __init__(self, size: tuple, pos: tuple, task: dict):
-        super().__init__(size, pos)
+        super().__init__(size, pos, BORDERS_COLOR)
         self.task = task
-        self.surface.fill((255, 0, 0))
         self.selected_area = None
 
         # Enregistrer
         self.save = Button(
             (100, 50),
             (0, 0),
-            "enregistrer"
+            "enregistrer",
+            SCRAP_COLOR
         )
 
         # Quitter
         self.quit = Button(
             (100, 50),
             (100, 0),
-            "quitter"
+            "quitter",
+            WARLORD_COLOR
         )
 
         # Nom
         self.nom_input = pygame_textinput.TextInputManager()
         self.nom_visualizer = InputVisualizer(
-            (size[0], size[1] // 8),
-            (0, 100),
+            (size[0] - 50, size[1] // 8),
+            (25, 100),
             3
         )
 
         # Description
         self.description_input = pygame_textinput.TextInputManager()
         self.description_visualizer = InputVisualizer(
-            (size[0], size[1] // 4),
-            (0, self.nom_visualizer.hit_box.bottom + 10),
+            (size[0] - 50, size[1] // 4),
+            (25, self.nom_visualizer.hit_box.bottom + 10),
             7
         )
 
         # Difficulté
         self.difficulty = Scale(
-            (size[0], size[1] // 10),
-            (0, self.description_visualizer.hit_box.bottom + 30),
-            5
+            (size[0] - 50, size[1] // 10),
+            (25, self.description_visualizer.hit_box.bottom + 30),
+            5,
+            self.color
         )
 
         # Longueur
         self.longueur = Scale(
-            (size[0], size[1] // 10),
-            (0, self.difficulty.hit_box.bottom + 20),
-            5
+            (size[0] - 50, size[1] // 10),
+            (25, self.difficulty.hit_box.bottom + 20),
+            5,
+            self.color
         )
 
         # Checkbox
         self.checkbox = CheckBox(
             (size[1] // 10, size[1] // 10),
-            (0, self.longueur.hit_box.bottom + 30),
+            (25, self.longueur.hit_box.bottom + 30),
         )
 
     def set_task(self):  # ------------------------------------------
@@ -190,6 +194,8 @@ class TaskEditor(Div):
         return ""
 
     def display(self, screen: pygame.surface):  # -------------------
+        self.surface.fill(self.color)
+
         self.save.display(self.surface)
         self.quit.display(self.surface)
 

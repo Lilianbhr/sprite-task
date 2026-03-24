@@ -35,17 +35,17 @@ class Button(Div):
     """
     Div qui ne contient qu'un seul texte centré.
     """
-    def __init__(self, size: tuple, pos: tuple, name: str):
-        super().__init__(size, pos)
-        self.name = get_screen_text_for(name, size[1] // 3)
+    def __init__(self, size: tuple, pos: tuple, name: str, color: tuple):
+        super().__init__(size, pos, color)
+        self.name = get_screen_text_for(name, size[1] // 3, (255, 255, 255))
         self.name_rect = self.name.get_rect()
         self.name_rect.center = (
             self.surface.get_width() // 2,
             self.surface.get_height() // 2,
         )
-        self.surface.fill((50, 0, 0))
 
     def display(self, screen: pygame.surface):
+        self.surface.fill(self.color)
         self.surface.blit(self.name, self.name_rect)
         screen.blit(self.surface, self.hit_box)
 
@@ -57,7 +57,7 @@ class CheckBox(Div):
     Div qui n'existe qu'en deux états disctincts.
     """
     def __init__(self, size: tuple, pos: tuple, state=False):
-        super().__init__(size, pos)
+        super().__init__(size, pos, (0, 0, 0))
         self.state = state
         self.color_state()
 

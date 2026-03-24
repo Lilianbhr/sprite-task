@@ -2,45 +2,49 @@ import pygame
 
 from src.components.general import Div, Button, CheckBox
 from src.components.scale import Scale, DoubleScale
+from src.constantes.theme import BORDERS_COLOR, SCRAP_COLOR, STRIKE_COLOR, WARLORD_COLOR, OMNICYDE_COLOR
 
 
 class FilterEditor(Div):
     """ interface permettant de controller le filtre actif """
     def __init__(self, size: tuple, pos: tuple, conditions: dict):
-        super().__init__(size, pos)
+        super().__init__(size, pos, BORDERS_COLOR)
         self.conditions = conditions
-        self.surface.fill((255, 255, 0))
 
         # Enregistrer
         self.save = Button(
             (100, 50),
-            (0, 0),
-            "enregistrer"
+            (25, 25),
+            "enregistrer",
+            SCRAP_COLOR
         )
 
         # Quitter
         self.quit = Button(
             (100, 50),
-            (100, 0),
-            "quitter"
+            (125, 25),
+            "quitter",
+            WARLORD_COLOR
         )
 
         # Réinitialiser
         self.reinitialize = Button(
             (100, 50),
-            (200, 0),
-            "reinitialiser"
+            (225, 25),
+            "reinitialiser",
+            OMNICYDE_COLOR
         )
 
         # Fini
-        self.fini = CheckBox((50, 50), (0, size[1] // 5))
+        self.fini = CheckBox((50, 50), (25, size[1] // 5))
 
-        scales_size = (size[0], size[1] // 10)
+        scales_size = (size[0] - 50, size[1] // 10)
 
         # Difficulté
         self.difficulte = DoubleScale(
             scales_size,
-            (0, size[1] // 3),
+            (25, size[1] // 3),
+            self.color,
             5,
             self.conditions["diff_min"],
             self.conditions["diff_max"]
@@ -49,7 +53,8 @@ class FilterEditor(Div):
         # Longueur
         self.longueur = DoubleScale(
             scales_size,
-            (0, self.difficulte.hit_box.bottom + 30),
+            (25, self.difficulte.hit_box.bottom + 30),
+            self.color,
             5,
             self.conditions["long_min"],
             self.conditions["long_max"]
@@ -60,18 +65,21 @@ class FilterEditor(Div):
         # Changement de mode
         self.SH = Button(
             (150, 50),
-            (0, self.longueur.hit_box.bottom + 50),
-            "scrap hunter"
+            (25, self.longueur.hit_box.bottom + 50),
+            "scrap hunter",
+            SCRAP_COLOR
         )
         self.SC = Button(
             (150, 50),
-            (160, self.SH.hit_box.top),
-            "strike commander"
+            (185, self.SH.hit_box.top),
+            "strike commander",
+            STRIKE_COLOR
         )
         self.WO = Button(
             (150, 50),
-            (320, self.SH.hit_box.top),
-            "warlord overdrive"
+            (345, self.SH.hit_box.top),
+            "warlord overdrive",
+            WARLORD_COLOR
         )
 
     def set_info(self):  # ------------------------------------------
@@ -129,6 +137,8 @@ class FilterEditor(Div):
             return ""
 
     def display(self, screen: pygame.surface):  # -------------------
+        self.surface.fill(self.color)
+
         self.save.display(self.surface)
         self.quit.display(self.surface)
         self.reinitialize.display(self.surface)

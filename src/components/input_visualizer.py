@@ -1,17 +1,18 @@
 import pygame
 from src.components.text import Text
+from src.constantes.theme import TEXT_COLOR, BG_COLOR
 
 
 class InputVisualizer(Text):
     """ Permet la visualisation correct d'un champ de texte (input) """
     def __init__(self, size: tuple, pos: tuple, lines_count: int, left="", right=""):
-        super().__init__(size, pos, left + right, size[1] // lines_count)
+        super().__init__(size, pos, BG_COLOR, left + right, size[1] // lines_count)
         self.left = left
         self.right = right
 
         # Cursor
         self.cursor = pygame.Surface((3, self.font_size))
-        self.cursor.fill((255, 255, 255))
+        self.cursor.fill(TEXT_COLOR)
         self.cursor_rect = self.cursor.get_rect()
 
         # Cursor visibility

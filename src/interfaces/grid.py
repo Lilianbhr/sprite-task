@@ -6,6 +6,7 @@ from src.components.general import Button
 from src.components.general import get_screen_text_for
 
 from src.components.text import Text
+from src.constantes.theme import BG_COLOR, BORDERS_COLOR, WARLORD_COLOR
 
 
 class Grid(Div):
@@ -15,7 +16,7 @@ class Grid(Div):
     et une position dynamique.
     """
     def __init__(self, size: tuple, pos: tuple, layout_size: tuple):
-        super().__init__(size, pos)
+        super().__init__(size, pos, BG_COLOR)
         self.elements = []
         self.gap = size[0] // 100
 
@@ -41,7 +42,7 @@ class Grid(Div):
             i += 1
 
     def display(self, screen: pygame.Surface):  # -------------------
-        self.surface.fill((0, 255, 0))
+        self.surface.fill(self.color)
         for elt in self.elements:
             elt.display(self.surface)
         screen.blit(self.surface, self.hit_box)
@@ -52,9 +53,8 @@ class Grid(Div):
 class Task(Div):
     """ Élément qui constitue la grille """
     def __init__(self, size: tuple, pos: tuple, spec: dict):
-        super().__init__(size, pos)
+        super().__init__(size, pos, BORDERS_COLOR)
         self.spec = spec
-        self.surface.fill((0, 0, 50))
 
         # Éléments
         self.ended = CheckBox(
@@ -65,11 +65,13 @@ class Task(Div):
         self.delete = Button(
             (size[0] // 3, size[1] // 5),
             (size[1] // 5 + 5, 0),
-            "supprimer"
+            "supprimer",
+            WARLORD_COLOR
         )
         self.nom = Text(
             (9 * size[0] // 10, 2 * size[1] // 3),
             (size[0] // 20, size[1] // 5 + 5),
+            BORDERS_COLOR,
             spec["nom"],
             size[1] // 7
         )
@@ -97,6 +99,7 @@ class Task(Div):
         return ""
 
     def display(self, screen: pygame.Surface):  # -------------------
+        self.surface.fill(self.color)
         self.ended.display(self.surface)
         self.delete.display(self.surface)
         self.nom.display(self.surface)

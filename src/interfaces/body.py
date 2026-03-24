@@ -2,6 +2,7 @@ import pygame
 
 from src.components.general import Div
 from src.constantes.filtres import ADAPTER
+from src.constantes.theme import BG_COLOR
 from src.database import Database
 
 from src.interfaces.grid import Grid
@@ -15,7 +16,8 @@ class Body(Div):
     les changement d'interfaces, notament avec TaskEditor et FilterEditor
     """
     def __init__(self, size: tuple, pos: tuple, cond: dict):
-        super().__init__(size, pos)
+        super().__init__(size, pos, BG_COLOR)
+        self.gap = size[1] // 20
 
         # Data
         self.database = Database()
@@ -38,8 +40,11 @@ class Body(Div):
         # Si un menu latéral est actif
         if self.mode_code:
 
-            side_size = (2 * self.hit_box.width // 5, self.hit_box.height)
-            side_pos = (self.hit_box.width - side_size[0], 0)
+            side_size = (
+                2 * self.hit_box.width // 5,
+                self.hit_box.height - self.gap
+            )
+            side_pos = (self.hit_box.width - side_size[0], self.gap)
 
             # TaskEditor
             if self.mode_code == 1:
@@ -62,15 +67,15 @@ class Body(Div):
             # Grille
             self.grid = Grid(
                 (3 * self.surface.get_width() // 5, self.hit_box.height),
-                (0, 0),
+                (0, self.gap),
                 (3, 4)
             )
 
         # Pas de menu latéral
         else:
             self.grid = Grid(
-                (self.hit_box.width, self.hit_box.height),
-                (0, 0),
+                (self.hit_box.width, self.hit_box.height - self.gap),
+                (0, self.gap),
                 (4, 4)
             )
 
@@ -167,6 +172,7 @@ class Body(Div):
                     self.filter_editor.set_info()
 
     def display(self, screen: pygame.Surface):
+        self.surface.fill(self.color)
 
         self.grid.display(self.surface)
 

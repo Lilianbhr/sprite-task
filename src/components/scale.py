@@ -4,9 +4,9 @@ from src.components.general import Div
 
 class Scale(Div):
     """ Permet la séléction d'une valeur dans [1;max_value] """
-    def __init__(self, size: tuple, pos: tuple, max_value: int,
+    def __init__(self, size: tuple, pos: tuple, max_value: int, color: tuple,
                  value=1, direction=1, limit=6):
-        super().__init__(size, pos)
+        super().__init__(size, pos, color)
 
         # Values
         self.max_value = max_value
@@ -59,6 +59,7 @@ class Scale(Div):
         self.set_elements()
 
     def display(self, screen: pygame.Surface):  # -------------------
+        self.surface.fill(self.color)
         for elt in self.elements:
             elt.display(self.surface)
         screen.blit(self.surface, self.hit_box)
@@ -67,8 +68,9 @@ class Scale(Div):
 
 
 class DoubleScale(Div):
-    def __init__(self, size: tuple, pos: tuple, range_size: int, mini: int, maxi: int):
-        super().__init__(size, pos)
+    def __init__(self, size: tuple, pos: tuple, color: tuple,
+                 range_size: int, mini: int, maxi: int):
+        super().__init__(size, pos, color)
         self.range_size = range_size
         self.gap = size[1] // 10
 
@@ -76,6 +78,7 @@ class DoubleScale(Div):
             (size[0], size[1] // 2),
             (0, 0),
             range_size,
+            color,
             value=mini,
             limit=maxi
         )
@@ -83,6 +86,7 @@ class DoubleScale(Div):
             (size[0], size[1] // 2),
             (0, self.min_scale.hit_box.bottom + self.gap),
             range_size,
+            color,
             value=maxi,
             direction=-1,
             limit=mini
@@ -110,6 +114,7 @@ class DoubleScale(Div):
         self.set_limits(self.min_scale.value, self.max_scale.value)
 
     def display(self, screen: pygame.Surface):
+        self.surface.fill(self.color)
         self.min_scale.display(self.surface)
         self.max_scale.display(self.surface)
         screen.blit(self.surface, self.hit_box)
@@ -119,7 +124,7 @@ class DoubleScale(Div):
 class Graduation(Div):
     """ Élément qui constitue Scale """
     def __init__(self, size: tuple, pos: tuple, active: int, value: int):
-        super().__init__(size, pos)
+        super().__init__(size, pos, (0, 0, 0))
         self.active = active
         self.value = value
         self.set_color()
