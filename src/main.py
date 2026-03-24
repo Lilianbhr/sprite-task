@@ -1,5 +1,6 @@
 import pygame
 from core import Core
+from src.constantes.theme import BG_COLOR
 from src.interfaces.list_interface import TaskList
 
 pygame.init()
@@ -7,7 +8,6 @@ pygame.init()
 # Window
 screen = pygame.display.set_mode()
 pygame.display.set_caption("SpriteTask")
-background_color = (255, 255, 255)
 
 # Core loop
 mode = Core(screen)
@@ -17,7 +17,7 @@ pygame.key.set_repeat(400, 60)
 
 while running:
 
-    screen.fill(background_color)
+    screen.fill(BG_COLOR)
     mode.run()
 
     events = pygame.event.get()

@@ -5,15 +5,18 @@ utilisées depuis n'importe quel endroit du système.
 
 import pygame
 
+from src.constantes.theme import TEXT_COLOR
+
 
 class Div:
     """
     Composant à la source de la structure par emboitement du projet.
     """
-    def __init__(self, size: tuple, pos: tuple):
+    def __init__(self, size: tuple, pos: tuple, color: tuple):
         self.surface = pygame.Surface(size)
         self.hit_box = self.surface.get_rect()
         self.hit_box.topleft = pos
+        self.color = color
 
     def is_under(self, point: tuple) -> bool:
         if self.hit_box.collidepoint(point):
@@ -79,9 +82,9 @@ class CheckBox(Div):
         screen.blit(self.surface, self.hit_box)
 
 
-def get_screen_text_for(text: str, size: int):
+def get_screen_text_for(text: str, size: int, color=TEXT_COLOR):
     """ Renvoie un texte sous un format exploitable
     pour l'affichage de pygame """
     font = pygame.font.SysFont("Arial", size)
-    screen_text = font.render(text, True, (255, 255, 255))
+    screen_text = font.render(text, True, color)
     return screen_text
